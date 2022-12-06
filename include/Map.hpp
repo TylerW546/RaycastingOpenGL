@@ -4,12 +4,14 @@
 #include "Util.hpp"
 
 struct Wall {
-    Point<float> p1_;
-    Point<float> p2_;
-    gl::Texture_base* texture_;
+    Point<float> p1;
+    Point<float> p2;
+    gl::Texture_base* texture;
 
     Wall(Point<float> p1, Point<float> p2);
     Wall(Point<float> p1, Point<float> p2, gl::Texture_base* texture);
+
+    
 };
 
 class Map {
@@ -18,5 +20,9 @@ class Map {
     public:
     Map(std::vector<Wall> wallList);
 
-    AddWall(Wall wall);
+    void AddWall(Wall wall);
+
+    void length() {return wallList_.size();}
+    void wall(int n) {return wallList_[0];}
+    void begin() {return wallList_.begin();}
 };

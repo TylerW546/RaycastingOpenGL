@@ -3,11 +3,15 @@
 #include <glBase/gl.hpp>
 
 class Ray : public gl::Sprite {
-    gl::Texture_base* texture_;
     float textureRange_[2];
     float angleOffset_;
     
-    Ray(float position, float width);
+    Ray(const gl::GameData &game, float position, float width);
+
+    void updatePosition(const gl::GameData &game, float position, float width);
+
+    void update(Map* map, point<float> position, float angle);
+
 
 };
 
