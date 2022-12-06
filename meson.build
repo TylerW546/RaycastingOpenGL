@@ -10,8 +10,7 @@ inc = [include_directories('include'), include_directories('C://include'), inclu
 cpp = meson.get_compiler('cpp')
 c = meson.get_compiler('c')
 
-source_files = ['main.cpp', 'source/Character.cpp', 'source/Entity.cpp', 'source/Game.cpp', 'source/Interface.cpp',
-    'source/Map.cpp', 'source/Raycaster.cpp']
+source_files = ['main.cpp', 'source/Character.cpp', 'source/Entity.cpp', 'source/Game.cpp', 'source/Map.cpp', 'source/Interface.cpp', 'source/Raycaster.cpp', 'source/Textures.cpp']
 
 deps = [cpp.find_library('glBase', dirs : 'C://bin')]
 
