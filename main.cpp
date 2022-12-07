@@ -18,8 +18,8 @@ int main() {
     
     std::cout << "hi" << "\n";
     Point<float> p1{10,10};
-    Point<float> p2{-10, 10};
-    std::cout << (p1 + p2).x << "\n";
+    Point<float> p2{-10,20};
+    std::cout << (p1.dotProduct(p2)) << "\n";
     
     wallList.push_back(Wall(p1, p2));
 

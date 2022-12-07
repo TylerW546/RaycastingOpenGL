@@ -7,6 +7,4 @@ class Character {
 
     Point<float> cameraAngles;
 
-    public:
-    
-}
+};
