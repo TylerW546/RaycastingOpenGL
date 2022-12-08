@@ -11,12 +11,3 @@ struct Point {
 };
 
 
-std::pair<float, float>
-wallIntersect(float angle, Point<float> position, Wall wall) {
-    float radians = angle*PI/180;
-    int raysin = std::sin(angle);
-    int raycos = std::cos(angle);
-    
-    raytan = raysin / raycos;
-
-}
