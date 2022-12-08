@@ -2,6 +2,6 @@
 
 gl::ResourceManager resourceManager;
 
-void InitializeTextures() {
+void initializeTextures() {
     resourceManager.loadTexture("sprites/test_sprite/sprite_square.jpg", false, "default_texture");
 }

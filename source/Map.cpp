@@ -16,6 +16,6 @@ Map::Map(std::vector<Wall> wallList) :
     wallList_(wallList)
 {}
 
-void Map::AddWall(Wall wall) {
+void Map::addWall(Wall wall) {
     wallList_.push_back(wall);
 }

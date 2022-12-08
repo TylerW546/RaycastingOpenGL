@@ -9,10 +9,11 @@
 #include <Map.hpp>
 
 #include "Textures.hpp"
+#include "Character.hpp"
 
 int main() {
     gl::Game game(24, 800, 900, "gl Library Test", gl::WindowType::stretch_window);
-    InitializeTextures();
+    initializeTextures();
 
     std::vector<Wall> wallList;
     
@@ -24,6 +25,7 @@ int main() {
 
     Map defaultMap = Map(wallList);
     
+    game.loadEntity(new Character(Point<float>(10,10), 1.0, 1.0, 1.0, 1.0, 1.0));
     game.execute();
 
     return 0;

@@ -2,4 +2,4 @@
 
 extern gl::ResourceManager resourceManager;
 
-void InitializeTextures();
+void initializeTextures();

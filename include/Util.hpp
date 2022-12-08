@@ -1,9 +1,17 @@
-#include <cstdlib>
-
 template<typename T>
 struct Point {
     T x;
     T y;
+
+    // Point() {
+    //     x = 0;
+    //     y = 0;
+    // }
+
+    // Point(T inX, T inY) {
+    //     x = inX;
+    //     y = inY;
+    // }
 
     Point<T> operator + (Point<T> const obj) {
         Point<T> out;
