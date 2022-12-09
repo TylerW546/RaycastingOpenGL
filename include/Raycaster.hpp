@@ -13,6 +13,7 @@ class Ray : public gl::Sprite {
 
     void updatePosition(const gl::GameData &game, float position, float width);
 
+    
     void update(Map* map, point<float> position, float angle);
 
 

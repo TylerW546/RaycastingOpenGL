@@ -70,5 +70,9 @@ void Ray::update(Map& map, Point<float> position, float angle,
             closest.textPosition = intersection.second;
         }
     }
+
+    
+
+    
 }
 
