@@ -22,7 +22,8 @@ class Map {
 
     void AddWall(Wall wall);
 
-    void length() {return wallList_.size();}
-    void wall(int n) {return wallList_[0];}
-    void begin() {return wallList_.begin();}
+    size_t length() {return wallList_.size();}
+    Wall wall(int n) {return wallList_[0];}
+    auto begin() {return wallList_.begin();}
+    auto end() {return wallList_.end();}
 };

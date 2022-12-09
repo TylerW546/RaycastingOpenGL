@@ -8,6 +8,9 @@ class Ray : public gl::Sprite {
     
     Ray(const gl::GameData &game, float position, float width);
 
+    static std::pair<float, float>
+        Ray::wallIntersect(float angle, Point<float> position, Wall wall); 
+
     void updatePosition(const gl::GameData &game, float position, float width);
 
     void update(Map* map, point<float> position, float angle);
