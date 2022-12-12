@@ -45,12 +45,13 @@ void Ray::updatePosition(const gl::GameData &game, float position, float width,
     moveTo(position, game.height/2);
     setSize(1,1);
     angleOffset_ = angleOffset;
+    width_ = width;
 }
 
-void Ray::update(Map& map, Point<float> position, float angle,
-                float viewMax, float viewMin) {
+void Ray::update(const gl::GameData &game, Map& map, Point<float> position,
+                float angle, float viewMax, float viewMin) {
     struct {
-        gl::Texture_base* texture_;
+        gl::Texture_base* texture;
         float dist; float textPosition;
     } closest = {};
 
@@ -65,14 +66,26 @@ void Ray::update(Map& map, Point<float> position, float angle,
         intersection = wallIntersect(angle, rayVect, position, wall,
                                         viewMax, viewMin);
         if (intersection.first && intersection.first < closest.dist) {
-            closest.texture_ = wall.texture;
+            closest.texture = wall.texture;
             closest.dist = intersection.first;
             closest.textPosition = intersection.second;
         }
     }
 
-    
-
-    
+    if (!closest) {
+        setScale(1,0);
+    } else {
+        setActiveTexture(closest.texture);
+        getRenderer()->setTextureRange(0,1, closest.textPosition, closest.textPosition);
+        setSize(1,1);
+        setScale(1,(game.height - PROPORTION/closest.dist/2));
+    }
 }
 
+
+RayCaster::RayCaster(const gl::GameData &game, float fovX, float fovY
+        float pixelsPerRay = PIXELS_PER_RAY_d) :
+    fovX_(fovX), fovY_(fovY), pixelsPerRay_(pixelsPerRay)
+        {
+    
+}
