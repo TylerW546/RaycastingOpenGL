@@ -3,12 +3,16 @@
 template<typename T>
 struct Point;
 
-
-
+#include <utility>
 #include <math.h>
+#include <cstdlib>
 
 #define PI 3.14159265
 #include <cstdlib>
+
+float deg(float rad) {return rad*180/PI;}
+float rad(float deg) {return deg*PI/180;}
+
 
 template<typename T>
 struct Point {

@@ -13,6 +13,8 @@ struct Wall {
     Point<float> p2;
     gl::Texture_base* texture;
 
+    static void DefineDefaultWallTexture();
+
     Wall(Point<float> p1, Point<float> p2);
     Wall(Point<float> p1, Point<float> p2, gl::Texture_base* texture);
 
