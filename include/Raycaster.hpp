@@ -1,27 +1,30 @@
 #include "Util.hpp"
+#include "Map.hpp"
 
 #include <glBase/gl.hpp>
 
 class Ray : public gl::Sprite {
     float textureRange_[2];
     float angleOffset_;
+
+    static std::pair<float, float>
+        checkIntersect(float angle, Point<float> position, Wall &wall);
     
     Ray(const gl::GameData &game, float position, float width);
 
     void updatePosition(const gl::GameData &game, float position, float width);
 
-    void update(Map* map, point<float> position, float angle);
+    void update(Map &map, Point<float> position, float angle);
 
 
 };
 
 class RayCaster {
 
-    static constexpr PIXELS_PER_RAY = 1;
+    static constexpr int PIXELS_PER_RAY = 1;
 
-    gl::EntityList_;
+    gl::EntityList entityList_;
     int screenWidth_;
-    gl::EntityList;
 
     RayCaster(const gl::GameData &game);
     ~RayCaster() {}
