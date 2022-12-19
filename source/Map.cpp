@@ -12,10 +12,10 @@ Wall::Wall(Point<float> point1, Point<float> point2, gl::Texture_base* texture) 
     texture(texture)
 {}
 
-Map::Map(std::vector<Wall> wallList) :
+Map::Map(std::vector<Wall*> wallList) :
     wallList_(wallList)
 {}
 
-void Map::AddWall(Wall wall) {
+void Map::AddWall(Wall* wall) {
     wallList_.push_back(wall);
 }

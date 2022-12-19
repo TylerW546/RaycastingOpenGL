@@ -22,15 +22,16 @@ struct Wall {
 };
 
 class Map {
-    std::vector<Wall> wallList_;
+    std::vector<Wall*> wallList_;
     
     public:
-    Map(std::vector<Wall> wallList);
+    Map() {}
+    Map(std::vector<Wall*> wallList);
 
-    void AddWall(Wall wall);
+    void AddWall(Wall* wall);
 
     size_t length() {return wallList_.size();}
-    Wall wall(int n) {return wallList_[n];}
+    Wall* wall(int n) {return wallList_[n];}
     auto begin() {return wallList_.begin();}
     auto end() {return wallList_.end();}
 };
