@@ -47,7 +47,10 @@ class TestGame : public gl::Entity {
         raycaster_->size_callback(width, height);
     }
 
-    void update(const gl::GameData &game) override {}
+    void update(const gl::GameData &game) override {
+        direction_ = std::fmod((direction_ + 1),360);
+        std::cout << direction_ << "\n   ";
+    }
 
     virtual void render(const glm::mat4& windowProjection) override {
         std::cout << "about to render raycaster\n";
@@ -58,7 +61,7 @@ class TestGame : public gl::Entity {
 
 int main() {
     gl::Game game(24, 800, 900, "gl Library Test", gl::WindowType::dynamic_window);
-    InitializeTextures();
+    initializeTextures();
 
     
     // game.loadEntity(new Character(Point<float>(10,10), 1.0, 1.0, 1.0, 1.0, 1.0));

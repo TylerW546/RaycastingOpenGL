@@ -11,4 +11,5 @@ Character::Character(Point<float> position = Point<float>(), float angle = 0, fl
 
 void Character::update(const gl::GameData& gameData) {
     std::cout << "Updating" << "\n";
+    
 }

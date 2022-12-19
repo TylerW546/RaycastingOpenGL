@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Util.hpp"
 #include "Map.hpp"
 
@@ -38,7 +40,7 @@ class RayCaster {
     static constexpr float VIEW_MIN_d = 10;
     static constexpr float VIEW_MAX_d = 1000;
 
-    static constexpr float WALL_HEIGHT = 100;
+    static constexpr float WALL_HEIGHT = 20;
 
     float pixelsPerRay_;
     float fovX_;
