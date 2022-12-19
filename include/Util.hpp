@@ -1,3 +1,22 @@
+#pragma once
+
+template<typename T>
+struct Point;
+
+#include <utility>
+#include <math.h>
+#include <cstdlib>
+#include <list>
+
+#define PI 3.14159265
+#include <cstdlib>
+
+class Util {
+    public:
+    static constexpr float deg(float rad) {return rad*180/PI;}
+    static constexpr float rad(float deg) {return deg*PI/180;}
+};
+
 template<typename T>
 struct Point {
     T x;
@@ -52,12 +71,12 @@ struct Point {
         y %= scalar;
     }
 
-    T dotProduct(Point<T> const obj) {
+    T dot(Point<T> const obj) {
         T out = x * obj.x + y * obj.y;
         return out;
     }
 
-    T crossProduct(Point<T> const obj) {
+    T cross(Point<T> const obj) {
         T out = x * obj.y - y * obj.x;
         return out;
     }
@@ -76,3 +95,11 @@ struct Point {
         y *= scale; 
     }
 };
+
+
+template <class T, typename... params>
+void callElements(std::list<T>* list, void (T::*method)(params...), params... args) {
+    for (auto element : list) {
+        (element->*method)(args...);
+    }
+}
