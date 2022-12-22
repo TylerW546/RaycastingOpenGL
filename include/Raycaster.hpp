@@ -12,6 +12,8 @@ class Ray : public gl::Sprite {
     float angleOffset_;
     float width_;
 
+    float angleCos_;
+
     // Get distance fo the wall from position along the ray
     // Returns 0 if wall isn't intersected by ray
     static float wallIntersectDist(Point<float> rayVect,

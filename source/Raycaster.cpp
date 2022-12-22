@@ -2,8 +2,10 @@
 
 Ray::Ray(Point<float> position, float width, float angleOffset) {
     angleOffset_ = angleOffset;
+    angleCos_ = std::cos(Util::rad(angleOffset_));
     moveTo(position.x, position.y);
-    setSize(1,1);
+    width_=width;
+    setSize(width,1);
     setActiveTexture(resourceManager.texture("default_texture"));
 }
 
@@ -13,25 +15,30 @@ float Ray::wallIntersectDist(Point<float> rayVect,
     wall.p1 -= position;
     wall.p2 -= position;
 
-    // Basic check of quadrants
-    if (rayVect.y > 0 != (wall.p1.y > 0 || wall.p2.y > 0))
-        return 0;
+    // // Basic check of quadrants
+    // if (rayVect.y > 0 != (wall.p1.y > 0 || wall.p2.y > 0))
+    //     return 0;
 
-    if (rayVect.x > 0 != (wall.p1.x > 0 || wall.p2.x > 0))
-        return 0;
+    // if (rayVect.x > 0 != (wall.p1.x > 0 || wall.p2.x > 0))
+    //     return 0;
     
-    // Check if they do intersect
-    if (std::abs(rayVect.x) > std::abs(rayVect.y)) {
-        int raycot = rayVect.x / rayVect.y;
-        if ((raycot*wall.p1.y > 0) == (raycot*wall.p2.y > 0))
-            return 0;
-    } else {
-        int raytan = rayVect.y / rayVect.x;
-        if ((raytan*wall.p1.x > 0) == (raytan*wall.p2.x > 0))
-            return 0;
-    }
+    // // Check if they do intersect
+    // if (std::abs(rayVect.x) > std::abs(rayVect.y)) {
+    //     int raycot = rayVect.x / rayVect.y;
+    //     if ((raycot*wall.p1.y > 0) == (raycot*wall.p2.y > 0))
+    //         return 0;
+    // } else {
+    //     int raytan = rayVect.y / rayVect.x;
+    //     if ((raytan*wall.p1.x > 0) == (raytan*wall.p2.x > 0))
+    //         return 0;
+    // }
 
     //std::cout << "PASSED INITIAL CHECKS -----------------\n"; 
+    
+    float u = wallTextureIntersect(rayVect, wall);
+    if (u > 1 || u < 0) {
+        return 0;
+    }
 
     Point<float> deltaWall = wall.p2-wall.p1;
     float cross = rayVect.cross(deltaWall);
@@ -52,6 +59,7 @@ void Ray::updatePosition(Point<float> position, float width,
     moveTo(position.x, position.y/2);
     setSize(1,1);
     angleOffset_ = angleOffset;
+    angleCos_ = std::cos(Util::rad(angleOffset_));
     width_ = width;
 }
 
@@ -66,7 +74,7 @@ void Ray::update(Map& map, Point<float> position,
     //angle += angleOffset_;
     float angle = angle_ + angleOffset_;
 
-    int angleRad = Util::rad(angle);
+    float angleRad = Util::rad(angle);
     Point<float> rayVect{std::cos(angleRad), std::sin(angleRad)};
     
     float intersection = 0;
@@ -84,12 +92,15 @@ void Ray::update(Map& map, Point<float> position,
     } else {
         setActiveTexture(closest.wall->texture);
         float texturePos = wallTextureIntersect(rayVect, *closest.wall);
-        getRenderer()->setTextureRange(0,1, texturePos, texturePos);
-        setSize(1,1);
-        if (closest.dist) {
-            std::cout << closest.dist << " ";
-        }
-        setScale(1, vertProportion/closest.dist);
+        getRenderer()->setTextureRange(texturePos, texturePos, 0, 1);
+        setSize(width_,1);
+        // if (closest.dist) {
+        //     std::cout << closest.dist << " ";
+        // }
+        // if (texturePos) {
+        //     std::cout << texturePos << " ";
+        // }
+        setScale(1, vertProportion/(closest.dist*angleCos_));
     }
 
     // std::cout << getScaleY() << " : " << getPosX() << " " <<  getPosY() << "\n";
