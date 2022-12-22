@@ -113,7 +113,7 @@ RayCaster::RayCaster(gl::Game &game, float fovX, float fovY,
     fovX_(fovX), fovY_(fovY), pixelsPerRay_(pixelsPerRay),
     viewMin_(viewMin), viewMax_(viewMax)
 {
-    verticalProportion_ = WALL_HEIGHT / (2*std::tan(fovY_/2));
+    verticalProportion_ = WALL_HEIGHT / (2*std::tan(Util::rad(fovY_)/2));
     screenSize_[0] = game.data().width;
     screenSize_[1] = game.data().height;
     float angleInc = fovX_ / (game.data().width/pixelsPerRay_);
@@ -155,19 +155,13 @@ void RayCaster::size_callback(uint16_t width, uint16_t height) {
 
 void RayCaster::render(const glm::mat4& windowProjection,
                         Map &map, Point<float> position, float direction) {
-    std::cout << "updating entities " << rays_.size() << "\n";
+    //std::cout << "updating entities " << rays_.size() << "\n";
     auto ray = rays_.begin();
     for (int i = 0; i < usedRays_; i++, ray++) {
         // std::cout << "Updating ray\n";
         (*ray).update(map, position, direction,
             viewMax_, viewMin_, verticalProportion_*screenSize_[1]);
-        if (ray == rays_.end()) throw;
-    }
-
-    std::cout << "rendering entities\n";
-    ray = rays_.begin();
-    for (int i = 0; i < usedRays_; i++, ray++) {
         (*ray).render(windowProjection);
-        
+        if (ray == rays_.end()) throw;
     }
 }

@@ -42,7 +42,7 @@ class RayCaster {
     static constexpr float VIEW_MIN_d = 10;
     static constexpr float VIEW_MAX_d = 1000;
 
-    static constexpr float WALL_HEIGHT = 20;
+    static constexpr float WALL_HEIGHT = 50;
 
     float pixelsPerRay_;
     float fovX_;

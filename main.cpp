@@ -18,29 +18,48 @@ class TestGame : public gl::Entity {
 
     Point<float> position_;
     float direction_;
+    float speed;
+    float rotSpeed;
 
     public:
 
     TestGame(gl::Game &game) {
         std::vector<Wall*> wallList;
     
-        std::cout << "hi" << "\n";
-        Point<float> p1{100,100};
-        Point<float> p2{150,-200};
-        Point<float> p3{-200,-150};
-        Point<float> p4{-150,250};
+        //std::cout << "hi" << "\n";
+        std::vector<Point<float>> points = {
+            Point<float> {200,200},
+            Point<float> {200,-200},
+            Point<float> {-200,-200},
+            Point<float> {-200,200},
+
+            Point<float> {-50,200},
+            Point<float> {-50,550},
+            Point<float> {300,550},
+
+            Point<float> {300,700},
+            Point<float> {700,700},
+            Point<float> {700,300},
+            Point<float> {300,300},
+
+            Point<float> {300,450},
+            Point<float> {50,450},
+            Point<float> {50,200}
+        };
         
-        wallList.push_back(new Wall(p1, p2));
-        wallList.push_back(new Wall(p2, p3));
-        wallList.push_back(new Wall(p3, p4));
-        wallList.push_back(new Wall(p4, p1));
+        for (int x = 0; x<14; x++) {
+            wallList.push_back(new Wall(points[x], points[(x+1)%14]));
+        }
 
         map_ = Map(wallList);
-        std::cout << "Initializing raycaster\n";
+        //std::cout << "Initializing raycaster\n";
         raycaster_ = new RayCaster(game);
 
         position_ = {0, 0};
         direction_ = 0;
+        speed = 5;
+        rotSpeed = 1;
+
     }
 
     void GameSize_callback(uint16_t width, uint16_t height) override {
@@ -48,12 +67,37 @@ class TestGame : public gl::Entity {
     }
 
     void update(const gl::GameData &game) override {
-        direction_ = std::fmod((direction_ + 1),360);
-        std::cout << direction_ << "\n   ";
+        //direction_ = std::fmod((direction_ + 1),360);
+
+        if (game.Keys[GLFW_KEY_LEFT]) {
+            position_.x += speed*cos((direction_+180)*3.1415926/180);
+            position_.y += speed*sin((direction_+180)*3.1415926/180);
+        }
+        if (game.Keys[GLFW_KEY_RIGHT]) {
+            position_.x += speed*cos((direction_)*3.1415926/180);
+            position_.y += speed*sin((direction_)*3.1415926/180);
+        }
+        if (game.Keys[GLFW_KEY_UP]) {
+            position_.x += speed*cos((direction_+270)*3.1415926/180);
+            position_.y += speed*sin((direction_+270)*3.1415926/180);
+        }
+        if (game.Keys[GLFW_KEY_DOWN]) {
+            position_.x += speed*cos((direction_+90)*3.1415926/180);
+            position_.y += speed*sin((direction_+90)*3.1415926/180);
+        }
+
+        if (game.Keys[GLFW_KEY_A]) {
+            direction_ -= rotSpeed;
+        }
+        if (game.Keys[GLFW_KEY_D]) {
+            direction_ += rotSpeed;
+        }
+
+        //std::cout << direction_ << "\n   ";
     }
 
     virtual void render(const glm::mat4& windowProjection) override {
-        std::cout << "about to render raycaster\n";
+        //std::cout << "about to render raycaster\n";
         raycaster_->render(windowProjection, map_, position_, direction_);
     }
 

@@ -9,6 +9,6 @@ uniform mat4 textureProjection;
 
 void main()
 {
-    TexCoords = (textureProjection*vertex.zw).xy;
+    TexCoords = (textureProjection * vec4(vertex.z, vertex.w,1,1)).xy;
     gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);
 }

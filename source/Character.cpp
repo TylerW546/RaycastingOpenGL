@@ -11,5 +11,7 @@ Character::Character(Point<float> position = Point<float>(), float angle = 0, fl
 
 void Character::update(const gl::GameData& gameData) {
     std::cout << "Updating" << "\n";
+    position_.x += std::cos(angle_) * walkSpeed_;
+    position_.y += std::sin(angle_) * walkSpeed_;
     
 }
