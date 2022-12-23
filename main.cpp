@@ -46,10 +46,12 @@ class TestGame : public gl::Entity {
             Point<float> {50,450},
             Point<float> {50,200}
         };
-        
-        for (int x = 0; x<14; x++) {
-            wallList.push_back(new Wall(points[x], points[(x+1)%14]));
+        constexpr int wallCount = 14;
+        for (int x = 0; x<wallCount; x++) {
+            wallList.push_back(new Wall(points[x], points[(x+1)%wallCount]));
         }
+
+        // wallList.push_back(new Wall(points[0], points[1]));
 
         map_ = Map(wallList);
         //std::cout << "Initializing raycaster\n";
@@ -70,27 +72,27 @@ class TestGame : public gl::Entity {
         //direction_ = std::fmod((direction_ + 1),360);
 
         if (game.Keys[GLFW_KEY_LEFT]) {
-            position_.x += speed*cos((direction_+180)*3.1415926/180);
-            position_.y += speed*sin((direction_+180)*3.1415926/180);
+            position_.x += speed*cos(Util::rad(direction_+90));
+            position_.y += speed*sin(Util::rad(direction_+90));
         }
         if (game.Keys[GLFW_KEY_RIGHT]) {
-            position_.x += speed*cos((direction_)*3.1415926/180);
-            position_.y += speed*sin((direction_)*3.1415926/180);
+            position_.x += speed*cos(Util::rad(direction_-90));
+            position_.y += speed*sin(Util::rad(direction_-90));
         }
         if (game.Keys[GLFW_KEY_UP]) {
-            position_.x += speed*cos((direction_+270)*3.1415926/180);
-            position_.y += speed*sin((direction_+270)*3.1415926/180);
+            position_.x += speed*cos(Util::rad(direction_));
+            position_.y += speed*sin(Util::rad(direction_));
         }
         if (game.Keys[GLFW_KEY_DOWN]) {
-            position_.x += speed*cos((direction_+90)*3.1415926/180);
-            position_.y += speed*sin((direction_+90)*3.1415926/180);
+            position_.x += speed*cos(Util::rad(direction_+180));
+            position_.y += speed*sin(Util::rad(direction_+180));
         }
 
         if (game.Keys[GLFW_KEY_A]) {
-            direction_ -= rotSpeed;
+            direction_ += rotSpeed;
         }
         if (game.Keys[GLFW_KEY_D]) {
-            direction_ += rotSpeed;
+            direction_ -= rotSpeed;
         }
 
         //std::cout << direction_ << "\n   ";
