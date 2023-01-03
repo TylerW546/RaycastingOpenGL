@@ -12,8 +12,8 @@ Ray::Ray(Point<float> position, float width, float angleOffset) {
 float Ray::wallIntersectDist(Point<float> rayVect,
         Point<float> position, Wall wall, float viewMax, float viewMin) {
     
-    wall.p1 -= position;
-    wall.p2 -= position;
+    // wall.p1 -= position;
+    // wall.p2 -= position;
 
     // // Basic check of quadrants
     // if (rayVect.y > 0 != (wall.p1.y > 0 || wall.p2.y > 0))
@@ -35,7 +35,7 @@ float Ray::wallIntersectDist(Point<float> rayVect,
 
     //std::cout << "PASSED INITIAL CHECKS -----------------\n"; 
     
-    float u = wallTextureIntersect(rayVect, wall);
+    float u = wallTextureIntersect(rayVect, position, wall);
     if (u > 1 || u < 0) {
         return 0;
     }
@@ -43,15 +43,15 @@ float Ray::wallIntersectDist(Point<float> rayVect,
     Point<float> deltaWall = wall.p2-wall.p1;
     float cross = rayVect.cross(deltaWall);
     // distance to interesction from ray origin
-    float t = wall.p1.cross(deltaWall)/cross;
+    float t = (wall.p1-position).cross(deltaWall)/cross;
     //std::cout << "T value: " << t << "\n";
     if (t < viewMin || t > viewMax) return 0;
     return t;
 }
 
-float Ray::wallTextureIntersect(Point<float> rayVect, Wall wall) {
+float Ray::wallTextureIntersect(Point<float> rayVect, Point<float> position, Wall wall) {
     Point<float> deltaWall = wall.p2-wall.p1;
-    return wall.p1.cross(rayVect)/rayVect.cross(deltaWall);
+    return (wall.p1-position).cross(rayVect)/rayVect.cross(deltaWall);
 }
 
 void Ray::updatePosition(Point<float> position, float width,
@@ -69,7 +69,7 @@ void Ray::update(Map& map, Point<float> position,
     struct {
         Wall* wall;
         float dist;
-    } closest = {};
+    } closest = {nullptr, 0};
 
     //angle += angleOffset_;
     float angle = angle_ + angleOffset_;
@@ -80,8 +80,9 @@ void Ray::update(Map& map, Point<float> position,
     float intersection = 0;
     for (auto wall : map) {
         intersection = wallIntersectDist(rayVect, position, *wall, viewMax, viewMin);
-        //if (intersection) std::cout << "WALL HIT --------------------------------------------------------\n";
-        if (intersection > closest.dist) {
+        if (intersection) std::cout << "WALL HIT: " << intersection << " --------------------------------------------------------\n";
+        if (intersection && (!closest.dist || intersection < closest.dist)) {
+            std::cout << "setting closest distance to " << intersection << "\n";
             closest.wall = wall;
             closest.dist = intersection;
         }
@@ -91,7 +92,7 @@ void Ray::update(Map& map, Point<float> position,
         setScale(1,10);
     } else {
         setActiveTexture(closest.wall->texture);
-        float texturePos = wallTextureIntersect(rayVect, *closest.wall);
+        float texturePos = wallTextureIntersect(rayVect, position, *closest.wall);
         getRenderer()->setTextureRange(texturePos, texturePos, 0, 1);
         setSize(width_,1);
         // if (closest.dist) {

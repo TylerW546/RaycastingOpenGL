@@ -20,7 +20,7 @@ class Ray : public gl::Sprite {
         Point<float> position, Wall wall, float viewMax, float viewMin);
     
     // Position on texture intersected by ray
-    static float wallTextureIntersect(Point<float> rayVect, Wall wall);
+    static float wallTextureIntersect(Point<float> rayVect, Point<float> position, Wall wall);
 
     public:
 
@@ -39,8 +39,8 @@ class RayCaster {
     static constexpr float PIXELS_PER_RAY_d = 1;
     static constexpr float FOV_X_d = 60;
     static constexpr float FOV_Y_d = 50;
-    static constexpr float VIEW_MIN_d = 10;
-    static constexpr float VIEW_MAX_d = 1000;
+    static constexpr float VIEW_MIN_d = 5;
+    static constexpr float VIEW_MAX_d = 10000;
 
     static constexpr float WALL_HEIGHT = 50;
 
