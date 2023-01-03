@@ -60,7 +60,7 @@ class TestGame : public gl::Entity {
         position_ = {0, 0};
         direction_ = 0;
         speed = 5;
-        rotSpeed = 1;
+        rotSpeed = 2;
 
     }
 
@@ -71,31 +71,32 @@ class TestGame : public gl::Entity {
     void update(const gl::GameData &game) override {
         //direction_ = std::fmod((direction_ + 1),360);
 
-        if (game.Keys[GLFW_KEY_LEFT]) {
+        if (game.Keys[GLFW_KEY_A]) {
             position_.x += speed*cos(Util::rad(direction_+90));
             position_.y += speed*sin(Util::rad(direction_+90));
         }
-        if (game.Keys[GLFW_KEY_RIGHT]) {
+        if (game.Keys[GLFW_KEY_D]) {
             position_.x += speed*cos(Util::rad(direction_-90));
             position_.y += speed*sin(Util::rad(direction_-90));
         }
-        if (game.Keys[GLFW_KEY_UP]) {
+        if (game.Keys[GLFW_KEY_W]) {
             position_.x += speed*cos(Util::rad(direction_));
             position_.y += speed*sin(Util::rad(direction_));
         }
-        if (game.Keys[GLFW_KEY_DOWN]) {
+        if (game.Keys[GLFW_KEY_S]) {
             position_.x += speed*cos(Util::rad(direction_+180));
             position_.y += speed*sin(Util::rad(direction_+180));
         }
 
-        if (game.Keys[GLFW_KEY_A]) {
+        if (game.Keys[GLFW_KEY_LEFT]) {
             direction_ += rotSpeed;
         }
-        if (game.Keys[GLFW_KEY_D]) {
+        if (game.Keys[GLFW_KEY_RIGHT]) {
             direction_ -= rotSpeed;
         }
 
-        //std::cout << direction_ << "\n   ";
+        std::cout << direction_ << "\n   ";
+
     }
 
     virtual void render(const glm::mat4& windowProjection) override {

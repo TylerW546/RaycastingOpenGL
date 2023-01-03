@@ -80,16 +80,16 @@ void Ray::update(Map& map, Point<float> position,
     float intersection = 0;
     for (auto wall : map) {
         intersection = wallIntersectDist(rayVect, position, *wall, viewMax, viewMin);
-        if (intersection) std::cout << "WALL HIT: " << intersection << " --------------------------------------------------------\n";
+        //if (intersection) std::cout << "WALL HIT: " << intersection << " --------------------------------------------------------\n";
         if (intersection && (!closest.dist || intersection < closest.dist)) {
-            std::cout << "setting closest distance to " << intersection << "\n";
+            //std::cout << "setting closest distance to " << intersection << "\n";
             closest.wall = wall;
             closest.dist = intersection;
         }
     }
 
     if (!closest.dist) {
-        setScale(1,10);
+        setScale(1,0);
     } else {
         setActiveTexture(closest.wall->texture);
         float texturePos = wallTextureIntersect(rayVect, position, *closest.wall);
@@ -117,17 +117,32 @@ RayCaster::RayCaster(gl::Game &game, float fovX, float fovY,
     verticalProportion_ = WALL_HEIGHT / (2*std::tan(Util::rad(fovY_)/2));
     screenSize_[0] = game.data().width;
     screenSize_[1] = game.data().height;
-    float angleInc = fovX_ / (game.data().width/pixelsPerRay_);
-    float angle = -fovX_/2;
+    // float angleInc = fovX_ / (game.data().width/pixelsPerRay_);
+    // float angle = fovX_/2;
+    // float xPos = pixelsPerRay_/2;
+    // while (rays_.size() < game.data().width/pixelsPerRay_) {
+    //     Ray ray = {Point<float>{xPos, (float)game.data().height/2}, pixelsPerRay_, angle};
+    //     ray.loadRenderer(&game);
+    //     ray.setSize(1,1);
+    //     rays_.push_back(ray);
+    //     angle -= angleInc, xPos += pixelsPerRay_;
+    // }
+    // usedRays_ = rays_.size();
+
+    float d = game.data().width/(2*std::tan(Util::rad(fovY_)/2));
+    float p = game.data().width/2;
     float xPos = pixelsPerRay_/2;
     while (rays_.size() < game.data().width/pixelsPerRay_) {
-        Ray ray = {Point<float>{xPos, (float)game.data().height/2}, pixelsPerRay_, angle};
+        Ray ray = {Point<float>{xPos, (float)game.data().height/2}, pixelsPerRay_, Util::deg(std::atan(p/d))};
         ray.loadRenderer(&game);
         ray.setSize(1,1);
         rays_.push_back(ray);
-        angle += angleInc, xPos += pixelsPerRay_;
+        
+        p -= pixelsPerRay_;
+        xPos += pixelsPerRay_;
     }
     usedRays_ = rays_.size();
+
 }
 
 
