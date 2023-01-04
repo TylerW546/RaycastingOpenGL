@@ -6,12 +6,12 @@ project_dir = meson.current_source_dir()
 build_dir = meson.current_build_dir()
 
 
-inc = [include_directories('include'), include_directories('C://include'), include_directories('C://Libraries/include')]
+inc = [include_directories('include'), include_directories('C://include'), include_directories('C://Libraries/include'), include_directories('source/MarchingMap/include')]
 
 cpp = meson.get_compiler('cpp')
 c = meson.get_compiler('c')
 
-source_files = ['main.cpp', 'source/Character.cpp', 'source/Entity.cpp', 'source/Game.cpp', 'source/Map.cpp', 'source/Interface.cpp', 'source/Raycaster.cpp', 'source/Textures.cpp']
+source_files = ['main.cpp', 'source/Character.cpp', 'source/Entity.cpp', 'source/Game.cpp', 'source/Map.cpp', 'source/Interface.cpp', 'source/Raycaster.cpp', 'source/Textures.cpp', 'source/MarchingMap/src/Environment.cpp', 'source/MarchingMap/src/NodeMap.cpp', 'source/MarchingMap/src/TrisSquares.cpp']
 
 deps = [cpp.find_library('glBase', dirs : 'C://bin')]
 

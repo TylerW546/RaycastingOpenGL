@@ -11,6 +11,7 @@
 #include "Character.hpp"
 #include "Raycaster.hpp"
 #include "Map.hpp"
+#include "Environment.hpp"
 
 class TestGame : public gl::Entity {
     RayCaster* raycaster_;
@@ -24,28 +25,41 @@ class TestGame : public gl::Entity {
     public:
 
     TestGame(gl::Game &game) {
+        Environment e(150, 150);
+        e.GenerateVertices();
+        e.GenerateNodes();
+        e.SetUpCombs();
+        e.MarchAllSquares();
+        
         std::vector<Wall*> wallList;
     
         //std::cout << "hi" << "\n";
-        std::vector<Point<float>> points = {
-            Point<float> {200,200},
-            Point<float> {200,-200},
-            Point<float> {-200,-200},
-            Point<float> {-200,200},
+        // std::vector<Point<float>> points = {
+        //     Point<float> {200,200},
+        //     Point<float> {200,-200},
+        //     Point<float> {-200,-200},
+        //     Point<float> {-200,200},
 
-            Point<float> {-50,200},
-            Point<float> {-50,550},
-            Point<float> {300,550},
+        //     Point<float> {-50,200},
+        //     Point<float> {-50,550},
+        //     Point<float> {300,550},
 
-            Point<float> {300,700},
-            Point<float> {700,700},
-            Point<float> {700,300},
-            Point<float> {300,300},
+        //     Point<float> {300,700},
+        //     Point<float> {700,700},
+        //     Point<float> {700,300},
+        //     Point<float> {300,300},
 
-            Point<float> {300,450},
-            Point<float> {50,450},
-            Point<float> {50,200}
-        };
+        //     Point<float> {300,450},
+        //     Point<float> {50,450},
+        //     Point<float> {50,200}
+        // };
+
+        std::vector<Point<float>> points;
+    
+        for (int i = 1; i < 100; i++) {
+            points.push_back(Point<float> {100*e.vertices[e.allLines[i]*3],100*e.vertices[e.allLines[i]*3+1]});
+        }
+        
         constexpr int wallCount = 14;
         for (int x = 0; x<wallCount; x++) {
             wallList.push_back(new Wall(points[x], points[(x+1)%wallCount]));
@@ -95,7 +109,7 @@ class TestGame : public gl::Entity {
             direction_ -= rotSpeed;
         }
 
-        std::cout << direction_ << "\n   ";
+        //std::cout << direction_ << "\n   ";
 
     }
 
