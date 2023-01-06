@@ -1,8 +1,3 @@
-#include<iostream>
-#include<set>
-#include<stdlib.h>
-#include<vector>
-
 #include"TrisSquares.hpp"
 #include"Environment.hpp"
 
@@ -17,12 +12,13 @@ Environment::Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_)
 	VERTS_WIDTH = 2 * NODES_WIDTH - 1;
 	VERTS_HEIGHT = 2 * NODES_HEIGHT - 1;
 
-	squares = new Square[(int64_t)SQUARES_WIDTH * SQUARES_HEIGHT];
 	for (int i = 0; i < SQUARES_HEIGHT; i++)
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			squares[(int64_t)i * SQUARES_WIDTH + j].SetCorners(2*(i * VERTS_WIDTH + j), 2*(i * SQUARES_WIDTH + j) + 2*VERTS_WIDTH + 2);
+			Square sq = Square();
+			sq.SetCorners(2*(i * VERTS_WIDTH + j), 2*(i * SQUARES_WIDTH + j) + 2*VERTS_WIDTH + 2);
+			squares.push_back(sq);
 		}
 	}
 
@@ -44,7 +40,7 @@ void Environment::GenerateVertices()
 
 void Environment::GenerateNodes() {
 	nM.GenerateNodeMap();
-	nM.SetRegionNumbers();
+	//nM.SetRegionNumbers();
 }
 
 void Environment::SetUpCombs() 
@@ -123,19 +119,34 @@ void Environment::SetUpCombs()
 
 void Environment::MarchAllSquares()
 {
+	mainMesh = std::vector<int> (0);
+	allLines = std::vector<int> (0);
+	exteriorLines = std::vector<int> (0);
+	uniqueExteriorLines = std::vector<int> (0);
+
+	std::cout << "Marching\n";
 	for (int i = 0; i < SQUARES_HEIGHT; i++)
 	{
+		std::cout << "row: " << i << " - ";
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			s = squares[(int64_t)i * SQUARES_WIDTH + j];
+			std::cout << j;
+			Square s = squares[i * SQUARES_WIDTH + j];
+			std::cout << "gotsq";
 			s.MarchSquare(nM.nodes, squareCombs, outLineCombs, VERTS_WIDTH);
+			std::cout << "--marched-";
 			if (s.code != 0)
 			{
 				for (int h = 0; h < s.numTris; h++)
 				{
+					std::cout << "h" << h;
+					std::cout << "-" << s.tris[h].v1 <<","<< s.tris[h].v2 <<","<< s.tris[h].v3;
 					mainMesh.push_back(s.tris[h].v1);
+					std::cout<<"tri1done";
 					mainMesh.push_back(s.tris[h].v2);
+					std::cout<<"tri2done";
 					mainMesh.push_back(s.tris[h].v3);
+					std::cout << "-mainmesh-";
 
 					allLines.push_back(s.tris[h].v1);
 					allLines.push_back(s.tris[h].v2);
@@ -143,9 +154,10 @@ void Environment::MarchAllSquares()
 					allLines.push_back(s.tris[h].v3);
 					allLines.push_back(s.tris[h].v3);
 					allLines.push_back(s.tris[h].v1);
+					std::cout << "all lines-";
 				}
 
-				int* outlineVerts = s.GetOutlineLines();
+				std::vector<int> outlineVerts = s.GetOutlineLines();
 				for (int g = 0; g < s.numTris + 1; g++)
 				{
 					exteriorLines.push_back(outlineVerts[g]);
@@ -161,4 +173,5 @@ void Environment::MarchAllSquares()
 			}
 		}
 	}
+	std::cout << "done marching";
 }

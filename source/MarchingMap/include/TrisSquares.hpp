@@ -3,6 +3,7 @@
 #ifndef TRISSQUARES_H
 #define TRISSQUARES_H
 
+#include <vector>
 
 using namespace std;
 
@@ -10,7 +11,8 @@ class Triangle
 {
 public:
 	Triangle();
-	void SetVerts(int v1, int v2, int v3);
+	Triangle(int v1_, int v2_, int v3_);
+	void SetVerts(int v1_, int v2_, int v3_);
 
 	int v1;
 	int v2;
@@ -23,15 +25,15 @@ class Square
 public:
 	Square();
 	void SetCorners(int c1_, int c4_);
-	void MarchSquare(int** nodes, int*** squareCombs, int*** outLineCombs, int VERTS_WIDTH);
-	int* GetOutlineLines();
+	void MarchSquare(std::vector<std::vector<int>> nodes, int*** squareCombs, int*** outLineCombs, int VERTS_WIDTH);
+	vector<int> GetOutlineLines();
 
 	int numOutVerts;
 	int* outVerts = new int[8];
 
-	Triangle* tris = new Triangle[4];
+	std::vector<Triangle> tris;
 	int numTris;
-	uint8_t code = 0;
+	int code = 0;
 
 	int c1;
 	int c2;

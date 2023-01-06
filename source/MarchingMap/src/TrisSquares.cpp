@@ -9,6 +9,13 @@ Triangle::Triangle()
 
 }
 
+Triangle::Triangle(int v1_, int v2_, int v3_)
+{
+	v1 = v1_;
+	v2 = v2_;
+	v3 = v3_;
+}
+
 void Triangle::SetVerts(int v1_, int v2_, int v3_)
 {
 	v1 = v1_;
@@ -29,7 +36,7 @@ void Square::SetCorners(int c1_, int c4_)
 	c4 = c4_;
 }
 
-void Square::MarchSquare(int** nodes, int*** squareCombs, int*** outLineCombs, int VERTS_WIDTH)
+void Square::MarchSquare(std::vector<std::vector<int>> nodes, int*** squareCombs, int*** outLineCombs, int VERTS_WIDTH)
 {
 	int j = c1 / 2 % VERTS_WIDTH;
 	int i = (c1 / 2 - j) / VERTS_WIDTH;
@@ -44,14 +51,18 @@ void Square::MarchSquare(int** nodes, int*** squareCombs, int*** outLineCombs, i
 	if (nodes[i + 1][j + 1] == 0)
 		code += 8;
 
+	std::cout <<"code:" << code;
+
 	int startVert = c1;
 	if (code != 0)
 	{
-		numTris = *(squareCombs + code)[0][0];
+		numTris = squareCombs[code][0][0];
+		std::cout << "-tris:" << numTris;
 		for (int tri = 1; tri <= numTris; tri++)
 		{
-			tris[tri - 1].SetVerts(c1 + squareCombs[code][tri][0], c1 + squareCombs[code][tri][1], c1 + squareCombs[code][tri][2]);
+			tris.push_back(Triangle(c1 + squareCombs[code][tri][0], c1 + squareCombs[code][tri][1], c1 + squareCombs[code][tri][2]));
 		}
+
 
 		if (code != 15)
 		{
@@ -69,15 +80,15 @@ void Square::MarchSquare(int** nodes, int*** squareCombs, int*** outLineCombs, i
 	}
 }
 
-int* Square::GetOutlineLines()
+vector<int> Square::GetOutlineLines()
 {
-	int* out = new int[(int64_t)numTris + 2];
-	out[0] = tris[0].v1;
-	out[1] = tris[0].v2;
-	out[2] = tris[0].v3;
+	vector<int> out;
+	out.push_back(tris[0].v1);
+	out.push_back(tris[0].v2);
+	out.push_back(tris[0].v3);
 	for (int i = 1; i < numTris; i++)
 	{
-		out[2 + i] = tris[i].v3;
+		out.push_back(tris[i].v3);
 	}
 	return out;
 }

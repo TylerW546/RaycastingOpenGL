@@ -6,6 +6,8 @@
 using namespace std;
 
 #include <stdlib.h>
+#include <vector>
+#include <iostream>
 
 class NodeMap
 {
@@ -23,8 +25,8 @@ public:
 	int NODES_WIDTH;
 	int NODES_HEIGHT;
 
-	int** nodes = NULL;
-	int** oldNodes = NULL;
+	std::vector<std::vector<int>> nodes;
+	std::vector<std::vector<int>> oldNodes;
 
 	int maxRegionNum = 0;
 };

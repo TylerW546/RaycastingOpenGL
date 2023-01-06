@@ -1,7 +1,3 @@
-#include<iostream>
-
-#include <stdlib.h>
-
 #include"NodeMap.hpp"
 
 NodeMap::NodeMap()
@@ -14,16 +10,14 @@ NodeMap::NodeMap(int NODES_WIDTH_, int NODES_HEIGHT_)
 	NODES_WIDTH = NODES_WIDTH_;
 	NODES_HEIGHT = NODES_HEIGHT_;
 	
-	nodes = new int* [NODES_HEIGHT];
 	for (int i = 0; i < NODES_HEIGHT; i++)
 	{
-		nodes[i] = new int[NODES_WIDTH];
+		nodes.push_back(std::vector<int> (NODES_WIDTH,0));
 	}
 
-	oldNodes = new int* [NODES_HEIGHT];
 	for (int i = 0; i < NODES_HEIGHT; i++)
 	{
-		oldNodes[i] = new int[NODES_WIDTH];
+		oldNodes.push_back(std::vector<int> (NODES_WIDTH,0));
 	}
 }
 

@@ -25,7 +25,7 @@ class TestGame : public gl::Entity {
     public:
 
     TestGame(gl::Game &game) {
-        Environment e(150, 150);
+        Environment e(20, 20);
         e.GenerateVertices();
         e.GenerateNodes();
         e.SetUpCombs();
@@ -65,7 +65,7 @@ class TestGame : public gl::Entity {
             wallList.push_back(new Wall(points[x], points[(x+1)%wallCount]));
         }
 
-        // wallList.push_back(new Wall(points[0], points[1]));
+        wallList.push_back(new Wall(points[0], points[1]));
 
         map_ = Map(wallList);
         //std::cout << "Initializing raycaster\n";

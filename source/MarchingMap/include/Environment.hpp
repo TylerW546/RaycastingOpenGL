@@ -3,10 +3,13 @@
 #ifndef Environment_H
 #define Environment_H
 
+#include<iostream>
+#include<set>
+#include<stdlib.h>
+#include<vector>
+
 #include"TrisSquares.hpp"
 #include"NodeMap.hpp"
-
-using namespace std;
 
 class Environment
 {
@@ -61,8 +64,7 @@ public:
 	int VERTS_WIDTH;
 	int VERTS_HEIGHT;
 
-	Square* squares = NULL;
-	Square s;
+	std::vector<Square> squares;
 };
 
 #endif
