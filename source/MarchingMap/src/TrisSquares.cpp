@@ -28,6 +28,13 @@ Square::Square()
 
 }
 
+Square::~Square()
+{
+	for (auto x : tris) {
+		delete x;
+	}
+}
+
 void Square::SetCorners(int c1_, int c4_)
 {
 	c1 = c1_;
@@ -51,16 +58,13 @@ void Square::MarchSquare(std::vector<std::vector<int>> nodes, int*** squareCombs
 	if (nodes[i + 1][j + 1] == 0)
 		code += 8;
 
-	std::cout <<"code:" << code;
-
 	int startVert = c1;
 	if (code != 0)
 	{
 		numTris = squareCombs[code][0][0];
-		std::cout << "-tris:" << numTris;
 		for (int tri = 1; tri <= numTris; tri++)
 		{
-			tris.push_back(Triangle(c1 + squareCombs[code][tri][0], c1 + squareCombs[code][tri][1], c1 + squareCombs[code][tri][2]));
+			tris.push_back(new Triangle(c1 + squareCombs[code][tri][0], c1 + squareCombs[code][tri][1], c1 + squareCombs[code][tri][2]));
 		}
 
 
@@ -69,26 +73,24 @@ void Square::MarchSquare(std::vector<std::vector<int>> nodes, int*** squareCombs
 			int numLines = outLineCombs[code][0][0];
 			numOutVerts = numLines * 2;
 
-			int nextVert = 0;
 			for (int i = 1; i <= numLines; i++)
 			{
-				outVerts[nextVert] = c1 + outLineCombs[code][i][0];
-				outVerts[nextVert + 1] = c1 + outLineCombs[code][i][1];
-				nextVert += 2;
+				outVerts.push_back(c1 + outLineCombs[code][i][0]);
+				outVerts.push_back(c1 + outLineCombs[code][i][1]);
 			}
 		}
 	}
 }
 
-vector<int> Square::GetOutlineLines()
+vector<int>* Square::GetOutlineLines()
 {
 	vector<int> out;
-	out.push_back(tris[0].v1);
-	out.push_back(tris[0].v2);
-	out.push_back(tris[0].v3);
+	out.push_back(tris[0]->v1);
+	out.push_back(tris[0]->v2);
+	out.push_back(tris[0]->v3);
 	for (int i = 1; i < numTris; i++)
 	{
-		out.push_back(tris[i].v3);
+		out.push_back(tris[i]->v3);
 	}
-	return out;
+	return &out;
 }

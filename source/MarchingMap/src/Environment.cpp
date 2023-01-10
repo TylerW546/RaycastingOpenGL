@@ -16,13 +16,39 @@ Environment::Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_)
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			Square sq = Square();
-			sq.SetCorners(2*(i * VERTS_WIDTH + j), 2*(i * SQUARES_WIDTH + j) + 2*VERTS_WIDTH + 2);
+			Square* sq = new Square();
+			sq->SetCorners(2*(i * VERTS_WIDTH + j), 2*(i * SQUARES_WIDTH + j) + 2*VERTS_WIDTH + 2);
 			squares.push_back(sq);
 		}
 	}
 
 	nM = NodeMap(NODES_WIDTH, NODES_HEIGHT);
+}
+
+Environment::~Environment() {
+	for (auto x : squares) {
+		delete x;
+	}
+
+	for (int i = 0; i < 16; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			delete[] squareCombs[i][j];
+		}
+		delete[] squareCombs[i];
+	}
+	delete[] squareCombs;
+
+	for (int i = 0; i < 16; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			delete[] outLineCombs[i][j];
+		}
+		delete[] outLineCombs[i];
+	}
+	delete[] outLineCombs;
 }
 
 void Environment::GenerateVertices()
@@ -33,7 +59,6 @@ void Environment::GenerateVertices()
 		{
 			vertices.push_back((float)(j) / (VERTS_WIDTH - 1) * 2 - 1);
 			vertices.push_back(-((float)(i) / (VERTS_HEIGHT - 1) * 2 - 1));
-			vertices.push_back(0);
 		}
 	}
 }
@@ -120,58 +145,47 @@ void Environment::SetUpCombs()
 void Environment::MarchAllSquares()
 {
 	mainMesh = std::vector<int> (0);
-	allLines = std::vector<int> (0);
-	exteriorLines = std::vector<int> (0);
-	uniqueExteriorLines = std::vector<int> (0);
+	//allLines = std::vector<int> (0);
+	//exteriorLines = std::vector<int> (0);
+	//uniqueExteriorLines = std::vector<int> (0);
 
-	std::cout << "Marching\n";
 	for (int i = 0; i < SQUARES_HEIGHT; i++)
 	{
-		std::cout << "row: " << i << " - ";
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
 			std::cout << j;
-			Square s = squares[i * SQUARES_WIDTH + j];
-			std::cout << "gotsq";
-			s.MarchSquare(nM.nodes, squareCombs, outLineCombs, VERTS_WIDTH);
-			std::cout << "--marched-";
-			if (s.code != 0)
+			Square* s = squares[i * SQUARES_WIDTH + j];
+			s->MarchSquare(nM.nodes, squareCombs, outLineCombs, VERTS_WIDTH);
+			if (s->code != 0)
 			{
-				for (int h = 0; h < s.numTris; h++)
+				for (int h = 0; h < s->numTris; h++)
 				{
-					std::cout << "h" << h;
-					std::cout << "-" << s.tris[h].v1 <<","<< s.tris[h].v2 <<","<< s.tris[h].v3;
-					mainMesh.push_back(s.tris[h].v1);
-					std::cout<<"tri1done";
-					mainMesh.push_back(s.tris[h].v2);
-					std::cout<<"tri2done";
-					mainMesh.push_back(s.tris[h].v3);
-					std::cout << "-mainmesh-";
+					mainMesh.push_back(s->tris[h]->v1);
+					mainMesh.push_back(s->tris[h]->v2);
+					mainMesh.push_back(s->tris[h]->v3);
 
-					allLines.push_back(s.tris[h].v1);
-					allLines.push_back(s.tris[h].v2);
-					allLines.push_back(s.tris[h].v2);
-					allLines.push_back(s.tris[h].v3);
-					allLines.push_back(s.tris[h].v3);
-					allLines.push_back(s.tris[h].v1);
-					std::cout << "all lines-";
+					// allLines.push_back(s->tris[h]->v1);
+					// allLines.push_back(s->tris[h]->v2);
+					// allLines.push_back(s->tris[h]->v2);
+					// allLines.push_back(s->tris[h]->v3);
+					// allLines.push_back(s->tris[h]->v3);
+					// allLines.push_back(s->tris[h]->v1);
 				}
 
-				std::vector<int> outlineVerts = s.GetOutlineLines();
-				for (int g = 0; g < s.numTris + 1; g++)
-				{
-					exteriorLines.push_back(outlineVerts[g]);
-					exteriorLines.push_back(outlineVerts[g + 1]);
-				}
-				exteriorLines.push_back(outlineVerts[s.numTris + 1]);
-				exteriorLines.push_back(outlineVerts[0]);
+				// std::vector<int> outlineVerts = *(s->GetOutlineLines());
+				// for (int g = 0; g < s->numTris + 1; g++)
+				// {
+				// 	exteriorLines.push_back(outlineVerts.at(g));
+				// 	exteriorLines.push_back(outlineVerts.at(g+1));
+				// }
+				// exteriorLines.push_back(outlineVerts.at(s->numTris + 1));
+				// exteriorLines.push_back(outlineVerts.at(0));
 
-				for (int f = 0; f < s.numOutVerts; f++)
-				{
-					uniqueExteriorLines.push_back(s.outVerts[f]);
-				}
+				// for (int f = 0; f < s->numOutVerts; f++)
+				// {
+				// 	uniqueExteriorLines.push_back(s->outVerts[f]);
+				// }
 			}
 		}
 	}
-	std::cout << "done marching";
 }

@@ -15,6 +15,7 @@ class Environment
 {
 public:
 	Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_);
+	~Environment();
 	void GenerateVertices();
 
 	void GenerateNodes();
@@ -47,13 +48,10 @@ public:
 	int*** squareCombs;
 	int*** outLineCombs;
 
-    std::vector<int> onNodes;
-	std::vector<int> offNodes;
-
 	std::vector<int> mainMesh;
-	std::vector<int> allLines;
-	std::vector<int> exteriorLines;
-	std::vector<int> uniqueExteriorLines;
+	//std::vector<int> allLines;
+	//std::vector<int> exteriorLines;
+	//std::vector<int> uniqueExteriorLines;
 
 	int SQUARES_WIDTH;
 	int SQUARES_HEIGHT;
@@ -64,7 +62,7 @@ public:
 	int VERTS_WIDTH;
 	int VERTS_HEIGHT;
 
-	std::vector<Square> squares;
+	std::vector<Square*> squares;
 };
 
 #endif

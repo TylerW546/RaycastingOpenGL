@@ -31,6 +31,7 @@ class TestGame : public gl::Entity {
         e.SetUpCombs();
         e.MarchAllSquares();
         
+        std::vector<Point<float>*> points;
         std::vector<Wall*> wallList;
     
         //std::cout << "hi" << "\n";
@@ -53,19 +54,20 @@ class TestGame : public gl::Entity {
         //     Point<float> {50,450},
         //     Point<float> {50,200}
         // };
+        //wallList.push_back(new Wall(points[0], points[1]));
 
-        std::vector<Point<float>> points;
+
+        
     
-        for (int i = 1; i < 100; i++) {
-            points.push_back(Point<float> {100*e.vertices[e.allLines[i]*3],100*e.vertices[e.allLines[i]*3+1]});
+        for (int i = 1; i < 400; i++) {
+            points.push_back(new Point<float> {1000*e.vertices[e.mainMesh[i]*2], 1000*e.vertices[e.mainMesh[i]*2+1]});
         }
         
-        constexpr int wallCount = 14;
+        constexpr int wallCount = 300;
         for (int x = 0; x<wallCount; x++) {
-            wallList.push_back(new Wall(points[x], points[(x+1)%wallCount]));
+            wallList.push_back(new Wall(*(points[x]), *(points[(x+1)%wallCount])));
         }
 
-        wallList.push_back(new Wall(points[0], points[1]));
 
         map_ = Map(wallList);
         //std::cout << "Initializing raycaster\n";
