@@ -24,11 +24,13 @@ class Square
 {
 public:
 	Square();
+	Square(int c1_, int c4_);
 	~Square();
 	void SetCorners(int c1_, int c4_);
 	void MarchSquare(std::vector<std::vector<int>> nodes, int*** squareCombs, int*** outLineCombs, int VERTS_WIDTH);
 	vector<int>* GetOutlineLines();
 
+	int numLines;
 	int numOutVerts;
 	std::vector<int> outVerts;
 

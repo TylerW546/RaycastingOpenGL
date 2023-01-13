@@ -28,10 +28,19 @@ Square::Square()
 
 }
 
+Square::Square(int c1_, int c4_)
+{
+	c1 = c1_;
+	c2 = c1_ + 2;
+	c3 = c4_ - 2;
+	c4 = c4_;
+}
+
 Square::~Square()
 {
-	for (auto x : tris) {
-		delete x;
+	while (!tris.empty()) {
+		delete tris.back();
+		tris.pop_back();
 	}
 }
 
@@ -57,20 +66,30 @@ void Square::MarchSquare(std::vector<std::vector<int>> nodes, int*** squareCombs
 		code += 4;
 	if (nodes[i + 1][j + 1] == 0)
 		code += 8;
+	
+	std::cout<<code;
 
 	int startVert = c1;
 	if (code != 0)
 	{
 		numTris = squareCombs[code][0][0];
+		std::cout<<" c1: " << c1 << "  tris -- " << numTris << " ";
 		for (int tri = 1; tri <= numTris; tri++)
 		{
-			tris.push_back(new Triangle(c1 + squareCombs[code][tri][0], c1 + squareCombs[code][tri][1], c1 + squareCombs[code][tri][2]));
+			std::cout<<"pushing...";
+			int q = c1 + squareCombs[code][tri][0];
+			int w = c1 + squareCombs[code][tri][1];
+			int e = c1 + squareCombs[code][tri][2];
+			std::cout<<q<<"  "<<w<<"  "<<e;
+			Triangle* x = new Triangle(q, w, e);
+			tris.push_back(x);
+			std::cout<<"...pushed";
 		}
 
 
 		if (code != 15)
 		{
-			int numLines = outLineCombs[code][0][0];
+			numLines = outLineCombs[code][0][0];
 			numOutVerts = numLines * 2;
 
 			for (int i = 1; i <= numLines; i++)

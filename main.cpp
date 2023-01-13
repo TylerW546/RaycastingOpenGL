@@ -27,9 +27,13 @@ class TestGame : public gl::Entity {
     TestGame(gl::Game &game) {
         Environment e(20, 20);
         e.GenerateVertices();
+        std::cout << "Verts generated\n";
         e.GenerateNodes();
+        std::cout << "Nodes generated\n";
         e.SetUpCombs();
+        std::cout << "Combs in place\n";
         e.MarchAllSquares();
+        std::cout << "Marched all Squares\n";
         
         std::vector<Point<float>*> points;
         std::vector<Wall*> wallList;
@@ -56,16 +60,14 @@ class TestGame : public gl::Entity {
         // };
         //wallList.push_back(new Wall(points[0], points[1]));
 
-
-        
     
-        for (int i = 1; i < 400; i++) {
+        for (int i = 1; i < 200; i++) {
             points.push_back(new Point<float> {1000*e.vertices[e.mainMesh[i]*2], 1000*e.vertices[e.mainMesh[i]*2+1]});
         }
         
-        constexpr int wallCount = 300;
-        for (int x = 0; x<wallCount; x++) {
-            wallList.push_back(new Wall(*(points[x]), *(points[(x+1)%wallCount])));
+        constexpr int wallCount = 100;
+        for (int x = 0; x<wallCount; x+=2) {
+            wallList.push_back(new Wall(*(points[x+1]), *(points[(x+2)%wallCount])));
         }
 
 
@@ -119,7 +121,6 @@ class TestGame : public gl::Entity {
         //std::cout << "about to render raycaster\n";
         raycaster_->render(windowProjection, map_, position_, direction_);
     }
-
 };
 
 int main() {

@@ -50,8 +50,8 @@ public:
 
 	std::vector<int> mainMesh;
 	//std::vector<int> allLines;
-	//std::vector<int> exteriorLines;
-	//std::vector<int> uniqueExteriorLines;
+	std::vector<int> exteriorLines;
+	std::vector<int> uniqueExteriorLines;
 
 	int SQUARES_WIDTH;
 	int SQUARES_HEIGHT;

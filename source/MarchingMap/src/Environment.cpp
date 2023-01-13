@@ -16,8 +16,7 @@ Environment::Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_)
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			Square* sq = new Square();
-			sq->SetCorners(2*(i * VERTS_WIDTH + j), 2*(i * SQUARES_WIDTH + j) + 2*VERTS_WIDTH + 2);
+			Square* sq = new Square(2*(i * VERTS_WIDTH + j), 2*(i * SQUARES_WIDTH + j) + 2*VERTS_WIDTH + 2);
 			squares.push_back(sq);
 		}
 	}
@@ -26,8 +25,9 @@ Environment::Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_)
 }
 
 Environment::~Environment() {
-	for (auto x : squares) {
-		delete x;
+	while (!squares.empty()) {
+		delete squares.back();
+		squares.pop_back();
 	}
 
 	for (int i = 0; i < 16; i++)
@@ -128,10 +128,10 @@ void Environment::SetUpCombs()
 	for (int i = 0; i < 16; i++)
 	{
 		int** newRow = new int* [3];
-		for (int j = 0; j < 5; j++)
+		for (int j = 0; j < 3; j++)
 		{
 			int* newRow2 = new int[2];
-			for (int k = 0; k < 3; k++)
+			for (int k = 0; k < 2; k++)
 			{
 				newRow2[k] = outLineCombsArray[i][j][k];
 			}
@@ -146,16 +146,17 @@ void Environment::MarchAllSquares()
 {
 	mainMesh = std::vector<int> (0);
 	//allLines = std::vector<int> (0);
-	//exteriorLines = std::vector<int> (0);
-	//uniqueExteriorLines = std::vector<int> (0);
+	exteriorLines = std::vector<int> (0);
+	uniqueExteriorLines = std::vector<int> (0);
 
 	for (int i = 0; i < SQUARES_HEIGHT; i++)
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			std::cout << j;
 			Square* s = squares[i * SQUARES_WIDTH + j];
+			std::cout<<"got sq";
 			s->MarchSquare(nM.nodes, squareCombs, outLineCombs, VERTS_WIDTH);
+			std::cout<<"marches";
 			if (s->code != 0)
 			{
 				for (int h = 0; h < s->numTris; h++)
@@ -163,6 +164,7 @@ void Environment::MarchAllSquares()
 					mainMesh.push_back(s->tris[h]->v1);
 					mainMesh.push_back(s->tris[h]->v2);
 					mainMesh.push_back(s->tris[h]->v3);
+					std::cout<<"Pushed";
 
 					// allLines.push_back(s->tris[h]->v1);
 					// allLines.push_back(s->tris[h]->v2);
@@ -185,6 +187,7 @@ void Environment::MarchAllSquares()
 				// {
 				// 	uniqueExteriorLines.push_back(s->outVerts[f]);
 				// }
+				// std::cout << "ExtPush\n";
 			}
 		}
 	}
