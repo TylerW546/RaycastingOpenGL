@@ -105,6 +105,7 @@ void Environment::MarchAllSquares()
 				// }
 				// exteriorLines.push_back(outlineVerts.at(s->numTris + 1));
 				// exteriorLines.push_back(outlineVerts.at(0));
+				
 				if (s->numOutVerts > 0) {
 					for (int f = 0; f < s->numOutVerts; f++)
 					{

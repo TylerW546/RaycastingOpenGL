@@ -40,18 +40,18 @@ float Ray::wallIntersectDist(Point<float> rayVect,
         return 0;
     }
 
-    Point<float> deltaWall = wall.p2-wall.p1;
+    Point<float> deltaWall = *wall.p2-*wall.p1;
     float cross = rayVect.cross(deltaWall);
     // distance to interesction from ray origin
-    float t = (wall.p1-position).cross(deltaWall)/cross;
+    float t = (*wall.p1-position).cross(deltaWall)/cross;
     //std::cout << "T value: " << t << "\n";
     if (t < viewMin || t > viewMax) return 0;
     return t;
 }
 
 float Ray::wallTextureIntersect(Point<float> rayVect, Point<float> position, Wall wall) {
-    Point<float> deltaWall = wall.p2-wall.p1;
-    return (wall.p1-position).cross(rayVect)/rayVect.cross(deltaWall);
+    Point<float> deltaWall = *wall.p2-*wall.p1;
+    return (*wall.p1-position).cross(rayVect)/rayVect.cross(deltaWall);
 }
 
 void Ray::updatePosition(Point<float> position, float width,

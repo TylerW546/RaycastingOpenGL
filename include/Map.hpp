@@ -9,16 +9,14 @@ struct Wall;
 #include "Textures.hpp"
 
 struct Wall {
-    Point<float> p1;
-    Point<float> p2;
+    Point<float>* p1;
+    Point<float>* p2;
     gl::Texture_base* texture;
 
     static void defineDefaultWallTexture();
 
-    Wall(Point<float> p1, Point<float> p2);
-    Wall(Point<float> p1, Point<float> p2, gl::Texture_base* texture);
-
-    
+    Wall(Point<float>* p1, Point<float>* p2);
+    Wall(Point<float>* p1, Point<float>* p2, gl::Texture_base* texture);
 };
 
 class Map {
@@ -27,6 +25,7 @@ class Map {
     public:
     Map() {}
     Map(std::vector<Wall*> wallList);
+    ~Map();
 
     void AddWall(Wall* wall);
 

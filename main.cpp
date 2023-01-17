@@ -25,61 +25,80 @@ class TestGame : public gl::Entity {
     public:
 
     TestGame(gl::Game &game) {
-        Environment e(20, 20);
-        e.GenerateVertices();
+        Environment* e = new Environment(50, 50);
+        e->GenerateVertices();
         std::cout << "Verts generated\n";
-        e.GenerateNodes();
+        e->GenerateNodes();
         std::cout << "Nodes generated\n";
-        e.MarchAllSquares();
+        e->MarchAllSquares();
         std::cout << "Marched all Squares\n";
         
         std::vector<Point<float>*> points;
         std::vector<Wall*> wallList;
     
-        //std::cout << "hi" << "\n";
-        // std::vector<Point<float>> points = {
-        //     Point<float> {200,200},
-        //     Point<float> {200,-200},
-        //     Point<float> {-200,-200},
-        //     Point<float> {-200,200},
-
-        //     Point<float> {-50,200},
-        //     Point<float> {-50,550},
-        //     Point<float> {300,550},
-
-        //     Point<float> {300,700},
-        //     Point<float> {700,700},
-        //     Point<float> {700,300},
-        //     Point<float> {300,300},
-
-        //     Point<float> {300,450},
-        //     Point<float> {50,450},
-        //     Point<float> {50,200}
+        // std::vector<Point<float>> pointsN = {
+        //     Point<float> {300,950},
+        //     Point<float> {250,900},
+        //     Point<float> {400,950},
+        //     Point<float> {300,950},
+        //     Point<float> {400,950},
+        //     Point<float> {450,900},
+        //     Point<float> {200,850},
+        //     Point<float> {150,800},
+        //     Point<float> {250,900},
+        //     Point<float> {200,850},
+        //     Point<float> {450,900},
+        //     Point<float> {500,850},
+        //     Point<float> {500,850},
+        //     Point<float> {550,800},
+        //     Point<float> {150,800},
+        //     Point<float> {150,700},
+        //     Point<float> {550,800},
+        //     Point<float> {550,700},
+        //     Point<float> {-600,650},
+        //     Point<float> {-650,600},
+        //     Point<float> {-500,650},
+        //     Point<float> {-600,650},
+        //     Point<float> {-500,650},
+        //     Point<float> {-450,600}
         // };
-        //wallList.push_back(new Wall(points[0], points[1]));
 
-        std::cout<<"uEL size: "<<e.uniqueExteriorLines.size()<<"\n";
-        std::cout<<"vert size: "<<e.vertices.size()<<"\n";
-        for (int i = 0; i < 20; i+=2) {
-            points.push_back(new Point<float> {1000*e.vertices.at(e.uniqueExteriorLines.at(i)*2), 1000*e.vertices.at(e.uniqueExteriorLines.at(i)*2+1)});
-            std::cout<<1000*e.vertices.at(e.uniqueExteriorLines.at(i)*2)<<"   "<< 1000*e.vertices.at(e.uniqueExteriorLines.at(i)*2+1)<<"\n";
-        }
-        
-        constexpr int wallCount = 5;
-        for (int x = 0; x<wallCount; x+=2) {
-            wallList.push_back(new Wall(*(points.at(x)), *(points.at(x+1))));
-        }
+        // for (int x = 0; x < 9; x++) {
+        //     wallList.push_back(new Wall(pointsN[x*2], pointsN[x*2+1]));
+        // }
 
+        // std::cout<<"uEL size: "<<e.uniqueExteriorLines.size()<<"\n";
+        // std::cout<<"vert size: "<<e.vertices.size()<<"\n";
+        // for (int i = 0; i < 10; i++) {
+        //     points.push_back(new Point<float>{1000*e.vertices.at(e.mainMesh.at(i)*2), 1000*(e.vertices.at(e.mainMesh.at(i)*2+1))});
+        // }
+        // constexpr int wallCount = 2;
+        // for (int x = 0; x<wallCount; x++) {
+        //     wallList.push_back(new Wall(points.at(x*2), points.at(x*2+1)));
+        // }
+
+        for (int i = 0; i < e->uniqueExteriorLines.size(); i+=2) {
+            Point<float>* p1 = new Point<float> {2500*e->vertices.at(e->uniqueExteriorLines.at(i)*2), 2500*(e->vertices.at(e->uniqueExteriorLines.at(i)*2+1))};
+            Point<float>* p2 = new Point<float> {2500*e->vertices.at(e->uniqueExteriorLines.at(i+1)*2), 2500*(e->vertices.at(e->uniqueExteriorLines.at(i+1)*2+1))};
+            //std::cout<<p1->x<<" "<<p1->y<<"   "<<p2->x<<" "<<p2->y<<"\n";
+            wallList.push_back(new Wall(p1,p2));
+        }
+        // delete e;
+        // std::cout<<"donewalls\n";
 
         map_ = Map(wallList);
+
+        std::cout<<"map created\n";
         //std::cout << "Initializing raycaster\n";
         raycaster_ = new RayCaster(game);
+
+        std::cout<<"raycaster\n";
 
         position_ = {0, 0};
         direction_ = 0;
         speed = 5;
         rotSpeed = 2;
-
+        std::cout<<"done\n";
     }
 
     void GameSize_callback(uint16_t width, uint16_t height) override {
@@ -118,19 +137,26 @@ class TestGame : public gl::Entity {
     }
 
     virtual void render(const glm::mat4& windowProjection) override {
-        //std::cout << "about to render raycaster\n";
         raycaster_->render(windowProjection, map_, position_, direction_);
     }
 };
 
 int main() {
     gl::Game game(24, 800, 900, "gl Library Test", gl::WindowType::dynamic_window);
+    std::cout<<"Game created\n";
     initializeTextures();
+    std::cout<<"txt\n";
 
     
     // game.loadEntity(new Character(Point<float>(10,10), 1.0, 1.0, 1.0, 1.0, 1.0));
-    game.loadEntity(new TestGame(game));
+    std::cout<<"loadingmain\n";
+    TestGame* testG = new TestGame(game);
+    std::cout<<"game made";
+    game.loadEntity(testG);
+    std::cout<<"loaded\n";
     game.execute();
 
+    //delete testG;
+    
     return 0;
 }
