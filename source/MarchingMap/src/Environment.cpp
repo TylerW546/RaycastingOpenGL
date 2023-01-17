@@ -68,95 +68,19 @@ void Environment::GenerateNodes() {
 	//nM.SetRegionNumbers();
 }
 
-void Environment::SetUpCombs() 
-{
-	int squareCombsArray[16][5][3] = {
-		{{0}, { 0,0,0 }}, // 0
-		{{1}, {0,1,VERTS_WIDTH}}, // 1
-		{{1}, {1,2,VERTS_WIDTH + 2}}, // 2
-		{{2}, {0,2,VERTS_WIDTH + 2}, {0,VERTS_WIDTH + 2,VERTS_WIDTH}}, // 3
-		{{1}, {2 * VERTS_WIDTH + 1,2 * VERTS_WIDTH,VERTS_WIDTH},}, // 4
-		{{2}, {0,1,2 * VERTS_WIDTH + 1},{0,2 * VERTS_WIDTH + 1,2 * VERTS_WIDTH}}, // 5
-		{{4}, {1,2,VERTS_WIDTH + 2},{1,VERTS_WIDTH + 2,2 * VERTS_WIDTH + 1},{1,2 * VERTS_WIDTH + 1,2 * VERTS_WIDTH},{1,2 * VERTS_WIDTH,VERTS_WIDTH}}, // 6
-		{{3}, {0,2,VERTS_WIDTH + 2},{0,VERTS_WIDTH + 2,2 * VERTS_WIDTH + 1},{0,2 * VERTS_WIDTH + 1,2 * VERTS_WIDTH}}, // 7
-		{{1}, {VERTS_WIDTH + 2,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH + 1}}, // 8
-		{{4}, {0,1,VERTS_WIDTH + 2},{0,VERTS_WIDTH + 2,2 * VERTS_WIDTH + 2},{0,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH + 1},{0,2 * VERTS_WIDTH + 1,VERTS_WIDTH}}, // 9
-		{{2}, {1,2,2 * VERTS_WIDTH + 2},{1,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH + 1}}, // 10
-		{{3}, {0,2,2 * VERTS_WIDTH + 2},{0,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH + 1},{0,2 * VERTS_WIDTH + 1,VERTS_WIDTH}}, // 11
-		{{2}, {VERTS_WIDTH,VERTS_WIDTH + 2,2 * VERTS_WIDTH + 2},{VERTS_WIDTH,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH}}, // 12
-		{{3}, {0,1,VERTS_WIDTH + 2},{0,VERTS_WIDTH + 2,2 * VERTS_WIDTH + 2},{0,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH}}, // 13
-		{{3}, {1,2,2 * VERTS_WIDTH + 2},{1,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH},{1,2 * VERTS_WIDTH,VERTS_WIDTH}}, // 14
-		{{2}, {0,2,2 * VERTS_WIDTH + 2},{0,2 * VERTS_WIDTH + 2,2 * VERTS_WIDTH}}, // 15
-	};
-
-	int outLineCombsArray[16][3][2] = {
-		{{0}}, // 0
-		{{1}, {1, VERTS_WIDTH}}, // 1
-		{{1}, {1, VERTS_WIDTH + 2}}, // 2
-		{{1}, {VERTS_WIDTH + 2,VERTS_WIDTH}}, // 3
-		{{1}, {VERTS_WIDTH, 2 * VERTS_WIDTH + 1}}, // 4
-		{{1}, {1,2 * VERTS_WIDTH + 1}}, // 5
-		{{2}, {1, VERTS_WIDTH}, {VERTS_WIDTH + 2,2 * VERTS_WIDTH + 1}}, // 6
-		{{1}, {VERTS_WIDTH + 2, 2 * VERTS_WIDTH + 1}}, // 7
-		{{1}, {VERTS_WIDTH + 2, 2 * VERTS_WIDTH + 1}}, // 8
-		{{2}, {VERTS_WIDTH, 2 * VERTS_WIDTH + 1}, {1, VERTS_WIDTH + 2}}, // 9
-		{{1}, {1,2 * VERTS_WIDTH + 1}}, // 10
-		{{1}, {VERTS_WIDTH, 2 * VERTS_WIDTH + 1}}, // 11
-		{{1}, {VERTS_WIDTH + 2,VERTS_WIDTH}}, // 12
-		{{1}, {1, VERTS_WIDTH + 2}}, // 13
-		{{1}, {1, VERTS_WIDTH}}, // 14
-		{{0}}, // 15
-	};
-
-	squareCombs = new int**[16];
-	for (int i = 0; i < 16; i++)
-	{
-		int** newRow = new int*[5];
-		for (int j = 0; j < 5; j++)
-		{
-			int* newRow2 = new int[3];
-			for (int k = 0; k < 3; k++)
-			{
-				newRow2[k] = squareCombsArray[i][j][k];
-			}
-			newRow[j] = newRow2;
-		}
-		squareCombs[i] = newRow;
-	}
-
-	outLineCombs = new int**[16];
-	for (int i = 0; i < 16; i++)
-	{
-		int** newRow = new int* [3];
-		for (int j = 0; j < 3; j++)
-		{
-			int* newRow2 = new int[2];
-			for (int k = 0; k < 2; k++)
-			{
-				newRow2[k] = outLineCombsArray[i][j][k];
-			}
-			newRow[j] = newRow2;
-		}
-		outLineCombs[i] = newRow;
-	}
-
-}
-
 void Environment::MarchAllSquares()
 {
-	mainMesh = std::vector<int> (0);
+	mainMesh.clear();
 	//allLines = std::vector<int> (0);
-	exteriorLines = std::vector<int> (0);
-	uniqueExteriorLines = std::vector<int> (0);
+	//exteriorLines = std::vector<int> (0);
+	uniqueExteriorLines.clear();
 
 	for (int i = 0; i < SQUARES_HEIGHT; i++)
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
 			Square* s = squares[i * SQUARES_WIDTH + j];
-			std::cout<<"got sq";
-			s->MarchSquare(nM.nodes, squareCombs, outLineCombs, VERTS_WIDTH);
-			std::cout<<"marches";
+			s->MarchSquare(nM.nodes, VERTS_WIDTH);
 			if (s->code != 0)
 			{
 				for (int h = 0; h < s->numTris; h++)
@@ -164,7 +88,6 @@ void Environment::MarchAllSquares()
 					mainMesh.push_back(s->tris[h]->v1);
 					mainMesh.push_back(s->tris[h]->v2);
 					mainMesh.push_back(s->tris[h]->v3);
-					std::cout<<"Pushed";
 
 					// allLines.push_back(s->tris[h]->v1);
 					// allLines.push_back(s->tris[h]->v2);
@@ -182,11 +105,12 @@ void Environment::MarchAllSquares()
 				// }
 				// exteriorLines.push_back(outlineVerts.at(s->numTris + 1));
 				// exteriorLines.push_back(outlineVerts.at(0));
-
-				// for (int f = 0; f < s->numOutVerts; f++)
-				// {
-				// 	uniqueExteriorLines.push_back(s->outVerts[f]);
-				// }
+				if (s->numOutVerts > 0) {
+					for (int f = 0; f < s->numOutVerts; f++)
+					{
+						uniqueExteriorLines.push_back(s->outVerts.at(f));
+					}
+				}
 				// std::cout << "ExtPush\n";
 			}
 		}
