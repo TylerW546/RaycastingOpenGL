@@ -22,10 +22,12 @@ class TestGame : public gl::Entity {
     float speed;
     float rotSpeed;
 
+    Environment* e = new Environment(50, 50);
+    int mapSize = 2500;
+
     public:
 
     TestGame(gl::Game &game) {
-        Environment* e = new Environment(50, 50);
         e->GenerateVertices();
         std::cout << "Verts generated\n";
         e->GenerateNodes();
@@ -35,56 +37,14 @@ class TestGame : public gl::Entity {
         
         std::vector<Point<float>*> points;
         std::vector<Wall*> wallList;
-    
-        // std::vector<Point<float>> pointsN = {
-        //     Point<float> {300,950},
-        //     Point<float> {250,900},
-        //     Point<float> {400,950},
-        //     Point<float> {300,950},
-        //     Point<float> {400,950},
-        //     Point<float> {450,900},
-        //     Point<float> {200,850},
-        //     Point<float> {150,800},
-        //     Point<float> {250,900},
-        //     Point<float> {200,850},
-        //     Point<float> {450,900},
-        //     Point<float> {500,850},
-        //     Point<float> {500,850},
-        //     Point<float> {550,800},
-        //     Point<float> {150,800},
-        //     Point<float> {150,700},
-        //     Point<float> {550,800},
-        //     Point<float> {550,700},
-        //     Point<float> {-600,650},
-        //     Point<float> {-650,600},
-        //     Point<float> {-500,650},
-        //     Point<float> {-600,650},
-        //     Point<float> {-500,650},
-        //     Point<float> {-450,600}
-        // };
 
-        // for (int x = 0; x < 9; x++) {
-        //     wallList.push_back(new Wall(pointsN[x*2], pointsN[x*2+1]));
-        // }
-
-        // std::cout<<"uEL size: "<<e.uniqueExteriorLines.size()<<"\n";
-        // std::cout<<"vert size: "<<e.vertices.size()<<"\n";
-        // for (int i = 0; i < 10; i++) {
-        //     points.push_back(new Point<float>{1000*e.vertices.at(e.mainMesh.at(i)*2), 1000*(e.vertices.at(e.mainMesh.at(i)*2+1))});
-        // }
-        // constexpr int wallCount = 2;
-        // for (int x = 0; x<wallCount; x++) {
-        //     wallList.push_back(new Wall(points.at(x*2), points.at(x*2+1)));
-        // }
 
         for (int i = 0; i < e->uniqueExteriorLines.size(); i+=2) {
-            Point<float>* p1 = new Point<float> {2500*e->vertices.at(e->uniqueExteriorLines.at(i)*2), 2500*(e->vertices.at(e->uniqueExteriorLines.at(i)*2+1))};
-            Point<float>* p2 = new Point<float> {2500*e->vertices.at(e->uniqueExteriorLines.at(i+1)*2), 2500*(e->vertices.at(e->uniqueExteriorLines.at(i+1)*2+1))};
+            Point<float>* p1 = new Point<float> {mapSize*e->vertices.at(e->uniqueExteriorLines.at(i)*2), mapSize*(e->vertices.at(e->uniqueExteriorLines.at(i)*2+1))};
+            Point<float>* p2 = new Point<float> {mapSize*e->vertices.at(e->uniqueExteriorLines.at(i+1)*2), mapSize*(e->vertices.at(e->uniqueExteriorLines.at(i+1)*2+1))};
             //std::cout<<p1->x<<" "<<p1->y<<"   "<<p2->x<<" "<<p2->y<<"\n";
             wallList.push_back(new Wall(p1,p2));
         }
-        // delete e;
-        // std::cout<<"donewalls\n";
 
         map_ = Map(wallList);
 
@@ -94,7 +54,7 @@ class TestGame : public gl::Entity {
 
         std::cout<<"raycaster\n";
 
-        position_ = {0, 0};
+        position_ = {-mapSize, -mapSize};
         direction_ = 0;
         speed = 5;
         rotSpeed = 2;
@@ -132,8 +92,9 @@ class TestGame : public gl::Entity {
             direction_ -= rotSpeed;
         }
 
-        //std::cout << direction_ << "\n   ";
-
+        if (game.Keys[GLFW_KEY_P]) {
+            e->nM.PrintMap((-position_.y/mapSize+1)/2*e->nM.NODES_HEIGHT, (position_.x/mapSize+1)/2*e->nM.NODES_WIDTH);
+        }
     }
 
     virtual void render(const glm::mat4& windowProjection) override {
