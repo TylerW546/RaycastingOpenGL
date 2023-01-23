@@ -135,3 +135,23 @@ void NodeMap::Spread(int i, int j, int num)
 		Spread(i, j-1, num);
 	}
 }
+
+
+void NodeMap::PrintMap(int x, int y) {
+	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	for (int i = 0; i < nodes.size(); i++) {
+		for (int j = 0; j < nodes[0].size(); j++) {
+			auto el = nodes[i][j];
+			if (i == x && j== y) {
+				std::cout << "X ";
+			} else {
+				if (el == 0) {
+					std::cout << "  ";
+				} else {
+					std::cout << el << " ";
+				}
+			}
+		}
+		std::cout << "\n";
+	}
+}

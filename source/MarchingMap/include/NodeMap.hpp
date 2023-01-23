@@ -22,6 +22,8 @@ public:
 	void SetRegionNumbers();
 	void Spread(int i, int j, int num);
 
+	void PrintMap(int i, int j);
+
 	int NODES_WIDTH;
 	int NODES_HEIGHT;
 
