@@ -8,6 +8,7 @@ using namespace std;
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
+#include <math.h>
 
 class NodeMap
 {
@@ -23,6 +24,8 @@ public:
 	void Spread(int i, int j, int num);
 
 	void PrintMap(int i, int j);
+
+	void MakePaths();
 
 	int NODES_WIDTH;
 	int NODES_HEIGHT;
