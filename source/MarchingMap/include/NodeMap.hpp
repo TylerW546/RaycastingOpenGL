@@ -25,7 +25,7 @@ public:
 
 	void PrintMap(int i, int j);
 
-	void MakePaths();
+	bool MakePaths();
 
 	int NODES_WIDTH;
 	int NODES_HEIGHT;

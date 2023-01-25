@@ -105,6 +105,16 @@ void NodeMap::SetRegionNumbers()
 	{
 		for (int j = 0; j < NODES_WIDTH; j++)
 		{
+			if (nodes[i][j] > 1) {
+				nodes[i][j] = 1;
+			}
+		}
+	}
+
+	for (int i = 0; i < NODES_HEIGHT; i++)
+	{
+		for (int j = 0; j < NODES_WIDTH; j++)
+		{
 			if (nodes[i][j] == 1)
 			{
 				Spread(i, j, nextSpreadNum);
@@ -139,24 +149,47 @@ void NodeMap::Spread(int i, int j, int num)
 	{
 		Spread(i, j-1, num);
 	}
+
+	if (nodes[i + 1][j+1] != 0 && nodes[i + 1][j+1] != num && nodes[i + 1][j+1] != num+1)
+	{
+		Spread(i + 1, j+1, num);
+	}
+	if (nodes[i - 1][j+1] != 0 && nodes[i - 1][j+1] != num && nodes[i - 1][j+1] != num+1)
+	{
+		Spread(i - 1, j+1, num);
+	}
+	if (nodes[i+1][j + 1] != 0 && nodes[i+1][j + 1] != num && nodes[i+1][j + 1] != num+1)
+	{
+		Spread(i+1, j+1, num);
+	}
+	if (nodes[i-1][j - 1] != 0 && nodes[i-1][j - 1] != num && nodes[i-1][j - 1] != num+1)
+	{
+		Spread(i-1, j-1, num);
+	}
 }
 
-void NodeMap::MakePaths() {
+bool NodeMap::MakePaths() {
+	SetRegionNumbers();
 	//If more than just a 2/3 Map,
 	bool needed = false;
 	for (auto row : nodes) {
 		for (auto x : row) {
 			if (x > 3) {
 				needed = true;
+				break;
 			}
+		}
+		if (needed) {
+			break;
 		}
 	}
 	if (!needed) {
-		return;
+		return false;
 	}
 	std::cout<<"needed\n";
 
 	std::vector<std::vector<int>> three_coords;
+	three_coords.clear();
 	for (int i = 0; i < NODES_HEIGHT; i++)
 	{
 		for (int j = 0; j < NODES_WIDTH; j++)
@@ -169,6 +202,7 @@ void NodeMap::MakePaths() {
 	std::cout <<"found: "<<three_coords.size()<<" threes\n"; 
 
 	std::vector<std::vector<int>> other_coords;
+	other_coords.clear();
 	for (int i = 0; i < NODES_HEIGHT; i++)
 	{
 		for (int j = 0; j < NODES_WIDTH; j++)
@@ -181,8 +215,8 @@ void NodeMap::MakePaths() {
 	std::cout <<"found: "<<other_coords.size()<<" others\n"; 
 
 	int choices = 10;  
-	std::vector<std::vector<int>> best_combs;
-
+	std::vector<std::vector<int>> best_combs = {};
+	best_combs.clear();
 	for (int i = 0; i < three_coords.size(); i++) {
 		for (int j = 0; j < other_coords.size(); j++) {
 			int mDist = abs(other_coords[j][0] - three_coords[i][0]) + abs(other_coords[j][1] - three_coords[i][1]);
@@ -204,6 +238,7 @@ void NodeMap::MakePaths() {
 	std::cout <<"found: "<<best_combs.size()<<" combs\n"; 
 
 	//Chooses one of those paths
+	srand (time(NULL));
 	int randomIndex = rand() % best_combs.size();
 	std::vector<int> best = best_combs[randomIndex];
 
@@ -231,14 +266,14 @@ void NodeMap::MakePaths() {
 	std::cout<<endX<<"  "<<endY<<"\n";
 
 	// Fills the line in with ones, recalcs numbers, runs again.
-	for (float x = startX; x <= endX; x += dX/distance) {
-		for (float y = startY; y <= endY; y += dY/distance) {
-			nodes[round(x)][round(y)] = 1;
-		}
+	float y = startY;
+	for (float x = startX; x <= endX && y <= endY; x += dX/distance) {
+		std::cout<<x<<"  "<<y<<"\n";
+		nodes[round(x)][round(y)] = 1;
+		y += dY/distance;
 	}
-
-	return;
-
+	std::cout << "done";
+	return true;
 }
 
 void NodeMap::PrintMap(int x, int y) {

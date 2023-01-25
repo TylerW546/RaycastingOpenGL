@@ -65,8 +65,8 @@ void Environment::GenerateVertices()
 
 void Environment::GenerateNodes() {
 	nM.GenerateNodeMap();
+	while (nM.MakePaths()) {}
 	nM.SetRegionNumbers();
-	nM.MakePaths();
 }
 
 void Environment::MarchAllSquares()
