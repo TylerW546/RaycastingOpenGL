@@ -75,7 +75,7 @@ void NodeMap::SmoothMap()
 void NodeMap::GenerateNodeMap()
 {
 	srand(time(NULL));
-	int percentOn = 50;
+	int percentOn = 55;
 	int outLayer = 0;
 	// Generating random nodes
 	for (int i = 0; i < NODES_HEIGHT; i++)
@@ -100,7 +100,7 @@ void NodeMap::GenerateNodeMap()
 
 void NodeMap::SetRegionNumbers()
 {
-	int nextSpreadNum = 2;
+	
 	for (int i = 0; i < NODES_HEIGHT; i++)
 	{
 		for (int j = 0; j < NODES_WIDTH; j++)
@@ -111,6 +111,7 @@ void NodeMap::SetRegionNumbers()
 		}
 	}
 
+	int nextSpreadNum = 2;
 	for (int i = 0; i < NODES_HEIGHT; i++)
 	{
 		for (int j = 0; j < NODES_WIDTH; j++)
@@ -133,36 +134,38 @@ void NodeMap::Spread(int i, int j, int num)
 		nodes[i][j] = num;
 	}
 
-	if (nodes[i + 1][j] != 0 && nodes[i + 1][j] != num && nodes[i + 1][j] != num+1)
+	int numGroup = round(num/2)*2;
+
+	if (nodes[i + 1][j] == 1 && round(nodes[i + 1][j]/2)*2 != numGroup)
 	{
 		Spread(i + 1, j, num);
 	}
-	if (nodes[i - 1][j] != 0 && nodes[i - 1][j] != num && nodes[i - 1][j] != num+1)
+	if (nodes[i - 1][j] == 1 && round(nodes[i - 1][j]/2)*2 != numGroup)
 	{
 		Spread(i - 1, j, num);
 	}
-	if (nodes[i][j + 1] != 0 && nodes[i][j + 1] != num && nodes[i][j + 1] != num+1)
+	if (nodes[i][j + 1] == 1 && round(nodes[i][j + 1]/2)*2 != numGroup)
 	{
 		Spread(i, j+1, num);
 	}
-	if (nodes[i][j - 1] != 0 && nodes[i][j - 1] != num && nodes[i][j - 1] != num+1)
+	if (nodes[i][j - 1] == 1 && round(nodes[i][j - 1]/2)*2 != numGroup)
 	{
 		Spread(i, j-1, num);
 	}
 
-	if (nodes[i + 1][j+1] != 0 && nodes[i + 1][j+1] != num && nodes[i + 1][j+1] != num+1)
+	if (nodes[i + 1][j+1] == 1 && round(nodes[i + 1][j+1]/2)*2 != numGroup)
 	{
 		Spread(i + 1, j+1, num);
 	}
-	if (nodes[i - 1][j+1] != 0 && nodes[i - 1][j+1] != num && nodes[i - 1][j+1] != num+1)
+	if (nodes[i - 1][j+1] == 1 && round(nodes[i - 1][j+1]/2)*2 != numGroup)
 	{
 		Spread(i - 1, j+1, num);
 	}
-	if (nodes[i+1][j + 1] != 0 && nodes[i+1][j + 1] != num && nodes[i+1][j + 1] != num+1)
+	if (nodes[i+1][j + 1] == 1 && round(nodes[i+1][j + 1]/2)*2 != numGroup)
 	{
 		Spread(i+1, j+1, num);
 	}
-	if (nodes[i-1][j - 1] != 0 && nodes[i-1][j - 1] != num && nodes[i-1][j - 1] != num+1)
+	if (nodes[i-1][j - 1] == 1 && round(nodes[i-1][j - 1]/2)*2 != numGroup)
 	{
 		Spread(i-1, j-1, num);
 	}
@@ -186,7 +189,6 @@ bool NodeMap::MakePaths() {
 	if (!needed) {
 		return false;
 	}
-	std::cout<<"needed\n";
 
 	std::vector<std::vector<int>> three_coords;
 	three_coords.clear();
@@ -199,7 +201,9 @@ bool NodeMap::MakePaths() {
 			}
 		}
 	}
-	std::cout <<"found: "<<three_coords.size()<<" threes\n"; 
+	if (three_coords.size() < 1) {
+		PrintMap(0,0);
+	} 
 
 	std::vector<std::vector<int>> other_coords;
 	other_coords.clear();
@@ -212,30 +216,32 @@ bool NodeMap::MakePaths() {
 			}
 		}
 	}
-	std::cout <<"found: "<<other_coords.size()<<" others\n"; 
 
 	int choices = 10;  
 	std::vector<std::vector<int>> best_combs = {};
 	best_combs.clear();
 	for (int i = 0; i < three_coords.size(); i++) {
 		for (int j = 0; j < other_coords.size(); j++) {
+			bool included = false;
+			
 			int mDist = abs(other_coords[j][0] - three_coords[i][0]) + abs(other_coords[j][1] - three_coords[i][1]);
-			if (best_combs.size() == 0) {
-				best_combs.push_back(std::vector<int> {i,j,mDist});
-			} else {
+			if (best_combs.size() > 0) {
 				for (int k = 0; k < best_combs.size(); k++) {
 					if (mDist < best_combs[k][2]) {
 						best_combs.insert(best_combs.begin() + k, std::vector<int> {i,j,mDist});
-					}
-
-					if (best_combs.size() > choices) {
-						best_combs.pop_back();
+						included = true;
+						break;
 					}
 				}
 			}
+			if (best_combs.size() < choices-1 && !included) {
+				best_combs.push_back(std::vector<int> {i,j,mDist});
+			}
+			if (best_combs.size() > choices) {
+				best_combs.pop_back();
+			}
 		}
 	}
-	std::cout <<"found: "<<best_combs.size()<<" combs\n"; 
 
 	//Chooses one of those paths
 	srand (time(NULL));
@@ -262,17 +268,12 @@ bool NodeMap::MakePaths() {
 	float dY = endY - startY;
 	int distance = sqrt(dX*dX + dY*dY);
 
-	std::cout<<startX<<"  "<<startY<<"\n";
-	std::cout<<endX<<"  "<<endY<<"\n";
-
 	// Fills the line in with ones, recalcs numbers, runs again.
 	float y = startY;
 	for (float x = startX; x <= endX && y <= endY; x += dX/distance) {
-		std::cout<<x<<"  "<<y<<"\n";
-		nodes[round(x)][round(y)] = 1;
+		nodes[round(x+.5)][round(y+.5)] = 1;
 		y += dY/distance;
 	}
-	std::cout << "done";
 	return true;
 }
 
@@ -285,9 +286,9 @@ void NodeMap::PrintMap(int x, int y) {
 				std::cout << "X ";
 			} else {
 				if (el == 0) {
-					std::cout << "  ";
+					std::cout << "# ";
 				} else {
-					std::cout << el << " ";
+					std::cout << "  ";
 				}
 			}
 		}

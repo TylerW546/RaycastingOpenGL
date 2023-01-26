@@ -26,6 +26,8 @@ public:
 
 	void MarchAllSquares();
 
+	int GetCode(int i, int j);
+
 	void ToggleMesh();
 	void ToggleLines();
 	void ToggleExteriors();

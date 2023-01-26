@@ -18,6 +18,7 @@ class TestGame : public gl::Entity {
     Map map_;
 
     Point<float> position_;
+    Point<float> posCheck_;
     float direction_;
     float speed;
     float rotSpeed;
@@ -54,7 +55,16 @@ class TestGame : public gl::Entity {
 
         std::cout<<"raycaster\n";
 
-        position_ = {-mapSize, -mapSize};
+        for (int i = 0; i < e->SQUARES_HEIGHT; i++)
+        {
+            for (int j = 0; j < e->SQUARES_WIDTH; j++)
+            {
+                if (e->GetCode(i,j) == 0) {
+                    position_ = {mapSize * (2*i/e->SQUARES_HEIGHT-1), mapSize * (2*j/e->SQUARES_WIDTH-1)};
+                }
+            }
+        }
+
         direction_ = 0;
         speed = 5;
         rotSpeed = 2;
@@ -68,21 +78,26 @@ class TestGame : public gl::Entity {
     void update(const gl::GameData &game) override {
         //direction_ = std::fmod((direction_ + 1),360);
 
+        posCheck_ = {position_.x, position_.y};
         if (game.Keys[GLFW_KEY_A]) {
-            position_.x += speed*cos(Util::rad(direction_+90));
-            position_.y += speed*sin(Util::rad(direction_+90));
+            posCheck_.x += speed*cos(Util::rad(direction_+90));
+            posCheck_.y += speed*sin(Util::rad(direction_+90));
         }
         if (game.Keys[GLFW_KEY_D]) {
-            position_.x += speed*cos(Util::rad(direction_-90));
-            position_.y += speed*sin(Util::rad(direction_-90));
+            posCheck_.x += speed*cos(Util::rad(direction_-90));
+            posCheck_.y += speed*sin(Util::rad(direction_-90));
         }
         if (game.Keys[GLFW_KEY_W]) {
-            position_.x += speed*cos(Util::rad(direction_));
-            position_.y += speed*sin(Util::rad(direction_));
+            posCheck_.x += speed*cos(Util::rad(direction_));
+            posCheck_.y += speed*sin(Util::rad(direction_));
         }
         if (game.Keys[GLFW_KEY_S]) {
-            position_.x += speed*cos(Util::rad(direction_+180));
-            position_.y += speed*sin(Util::rad(direction_+180));
+            posCheck_.x += speed*cos(Util::rad(direction_+180));
+            posCheck_.y += speed*sin(Util::rad(direction_+180));
+        }
+        if (e->GetCode((-posCheck_.y/mapSize+1)/2*e->SQUARES_HEIGHT, (posCheck_.x/mapSize+1)/2*e->SQUARES_WIDTH) != 15) {
+            position_.x = posCheck_.x;
+            position_.y = posCheck_.y;
         }
 
         if (game.Keys[GLFW_KEY_LEFT]) {

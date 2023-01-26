@@ -65,8 +65,10 @@ void Environment::GenerateVertices()
 
 void Environment::GenerateNodes() {
 	nM.GenerateNodeMap();
+	nM.PrintMap(0,0);
 	while (nM.MakePaths()) {}
 	nM.SetRegionNumbers();
+	nM.PrintMap(0,0);
 }
 
 void Environment::MarchAllSquares()
@@ -117,4 +119,8 @@ void Environment::MarchAllSquares()
 			}
 		}
 	}
+}
+
+int Environment::GetCode(int i, int j) {
+	return squares[i * SQUARES_WIDTH + j]->code;
 }
