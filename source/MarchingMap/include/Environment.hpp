@@ -27,6 +27,7 @@ public:
 	void MarchAllSquares();
 
 	int GetCode(int i, int j);
+	bool PositionInAir(float x, float y);
 
 	void ToggleMesh();
 	void ToggleLines();

@@ -124,3 +124,25 @@ void Environment::MarchAllSquares()
 int Environment::GetCode(int i, int j) {
 	return squares[i * SQUARES_WIDTH + j]->code;
 }
+
+bool Environment::PositionInAir(float i, float j) {
+	i-=.5;
+	j-=.5;
+	int code = squares[round(i) * SQUARES_WIDTH + round(j)]->code;
+	int iFloor = i;
+	int jFloor = j;
+	float leftOverI = i-iFloor;
+	float leftOverJ = j-jFloor; 
+
+	switch (code)
+	{
+	case 0:
+		return true;
+	case 1:
+		return leftOverI+leftOverJ < 0.5;
+	case 15:
+		return false;
+	default:
+		return true;
+	}
+}
