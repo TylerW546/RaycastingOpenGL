@@ -113,6 +113,7 @@ void Environment::MarchAllSquares()
 					for (int f = 0; f < s->numOutVerts; f++)
 					{
 						uniqueExteriorLines.push_back(s->outVerts.at(f));
+						wallCodes.push_back(s->code);
 					}
 				}
 				// std::cout << "ExtPush\n";

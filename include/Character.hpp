@@ -34,7 +34,7 @@ class Character : public gl::Entity {
     gl::Texture_base* icon_;  
 
     public:
-    Character(Point<float> position, float angle, float walkSpeed, float runSpeed, float maxHealth, float maxStamina);
+    Character(Point<float> position = Point<float>(), float angle = 0, float walkSpeed = 1, float runSpeed = 2, float maxHealth = 100, float maxStamina = 100);
     Point<float> getPosition() {return position_;}
     float getAngle() {return angle_;}
     

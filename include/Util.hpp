@@ -90,7 +90,7 @@ struct Point {
     }
 
     void setMagnitude(T scalar) {
-        T scale = scalar / getMagnitude;
+        T scale = scalar / getMagnitude();
         x *= scale;
         y *= scale; 
     }

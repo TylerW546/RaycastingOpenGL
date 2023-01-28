@@ -2,6 +2,8 @@
 #include <glBase/gl.hpp>
 
 #include <iostream>
+#include <string>
+#include <sstream>
 
 #include <cmath>
 #include <math.h>
@@ -33,14 +35,17 @@ class TestGame : public gl::Entity {
         e->GenerateNodes();
         e->MarchAllSquares();
         
+        
+
         std::vector<Point<float>*> points;
         std::vector<Wall*> wallList;
 
         for (int i = 0; i < e->uniqueExteriorLines.size(); i+=2) {
             Point<float>* p1 = new Point<float> {mapSize*e->vertices.at(e->uniqueExteriorLines.at(i)*2), mapSize*(e->vertices.at(e->uniqueExteriorLines.at(i)*2+1))};
             Point<float>* p2 = new Point<float> {mapSize*e->vertices.at(e->uniqueExteriorLines.at(i+1)*2), mapSize*(e->vertices.at(e->uniqueExteriorLines.at(i+1)*2+1))};
+            int code = e->wallCodes.at(i);
             //std::cout<<p1->x<<" "<<p1->y<<"   "<<p2->x<<" "<<p2->y<<"\n";
-            wallList.push_back(new Wall(p1,p2));
+            wallList.push_back(new Wall(p1,p2,resourceManager.texture(std::to_string(code))));
         }
 
         map_ = Map(wallList);
@@ -107,7 +112,7 @@ class TestGame : public gl::Entity {
 
         if (game.Keys[GLFW_KEY_P]) {
             e->nM.PrintMap((-position_.y/mapSize+1)/2*e->nM.NODES_HEIGHT, (position_.x/mapSize+1)/2*e->nM.NODES_WIDTH);
-            std::cout<<e->GetCode((-posCheck_.y/mapSize+1)/2*e->SQUARES_HEIGHT, (posCheck_.x/mapSize+1)/2*e->SQUARES_WIDTH);
+            std::cout<<e->GetCode((-posCheck_.y/mapSize+1)/2*e->SQUARES_HEIGHT, (posCheck_.x/mapSize+1)/2*e->SQUARES_WIDTH)<<"\n";
         }
     }
 

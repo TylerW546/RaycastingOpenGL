@@ -1,6 +1,6 @@
 #include "Character.hpp"
 
-Character::Character(Point<float> position = Point<float>(), float angle = 0, float walkSpeed = 1, float runSpeed = 2, float maxHealth = 100, float maxStamina = 100) :
+Character::Character(Point<float> position, float angle, float walkSpeed, float runSpeed, float maxHealth, float maxStamina) :
     position_(position),
     angle_(angle),
     walkSpeed_(walkSpeed),

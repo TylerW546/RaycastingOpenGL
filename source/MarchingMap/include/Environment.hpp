@@ -55,6 +55,7 @@ public:
 	//std::vector<int> allLines;
 	std::vector<int> exteriorLines;
 	std::vector<int> uniqueExteriorLines;
+	std::vector<int> wallCodes;
 
 	int SQUARES_WIDTH;
 	int SQUARES_HEIGHT;

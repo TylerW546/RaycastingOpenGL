@@ -6,19 +6,19 @@ project_dir = meson.current_source_dir()
 build_dir = meson.current_build_dir()
 
 
-inc = [include_directories('include'), include_directories('C://include'), include_directories('C://Libraries/include'), include_directories('source/MarchingMap/include')]
+inc = [include_directories('include'), include_directories('/usr/local/include'),include_directories('/usr/local/Libraries/include'), include_directories('source/MarchingMap/include')]
 
 cpp = meson.get_compiler('cpp')
 c = meson.get_compiler('c')
 
 source_files = ['main.cpp', 'source/Character.cpp', 'source/Entity.cpp', 'source/Game.cpp', 'source/Map.cpp', 'source/Interface.cpp', 'source/Raycaster.cpp', 'source/Textures.cpp', 'source/MarchingMap/src/Environment.cpp', 'source/MarchingMap/src/NodeMap.cpp', 'source/MarchingMap/src/TrisSquares.cpp']
 
-deps = [cpp.find_library('glBase', dirs : 'C://bin')]
+deps = [cpp.find_library('glBase', dirs : '/usr/local/lib')]
 
 install_subdir(project_dir / 'shaders', install_dir: build_dir, strip_directory : false)
 install_subdir(project_dir / 'sprites', install_dir: build_dir, strip_directory : false)
-install_data('C://share/OpenGL/glfw3.dll', install_dir: build_dir)
-install_data('C://bin/libglBase.dll', install_dir: build_dir)
+install_data('/usr/local/share/OpenGL/glfw3.dll', install_dir: build_dir)
+#install_data('/usr/local/bin/libglBase.dll', install_dir: build_dir)
 
 exe = executable('Raycaster', source_files,
     include_directories : inc,
