@@ -10,8 +10,6 @@ height = 64
 pygame.font.init()
 myfont = pygame.font.SysFont('Arial', 40)
 
-
-
 for i in range(16):
     surf = pygame.Surface((width,height), pygame.SRCALPHA, 32)
     surf.blit(back, (0,0))
