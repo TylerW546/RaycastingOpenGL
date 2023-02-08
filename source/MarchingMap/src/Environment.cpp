@@ -127,8 +127,8 @@ int Environment::GetCode(int i, int j) {
 }
 
 bool Environment::PositionInAir(float i, float j) {
-	i-=.5;
-	j-=.5;
+	i -= .5;
+	j -= .5;
 	int code = squares[round(i) * SQUARES_WIDTH + round(j)]->code;
 	int iFloor = i;
 	int jFloor = j;
@@ -139,8 +139,14 @@ bool Environment::PositionInAir(float i, float j) {
 	{
 	case 0:
 		return true;
-	case 1:
-		return leftOverI+leftOverJ < 0.5;
+	case 3:
+		return leftOverI > .5;
+	case 5:
+		return leftOverJ > .5;
+	case 10:
+		return leftOverJ < .5;
+	case 12:
+		return leftOverI < .5;
 	case 15:
 		return false;
 	default:
