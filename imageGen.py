@@ -17,5 +17,7 @@ for i in range(16):
     textsurface = myfont.render(str(i), False, (0,0,0))
     rect = textsurface.get_rect(center=(width//2,height//2))
     surf.blit(textsurface, rect)
+
+    surf = pygame.transform.flip(surf, False, True)
     
     pygame.image.save(surf, "sprites/test_sprite/"+str(i)+".jpg")
