@@ -127,26 +127,49 @@ int Environment::GetCode(int i, int j) {
 }
 
 bool Environment::PositionInAir(float i, float j) {
-	i -= .5;
-	j -= .5;
-	int code = squares[round(i) * SQUARES_WIDTH + round(j)]->code;
+	//i -= .5;
+	//j -= .5;
+	int code = squares[round(i-.5) * SQUARES_WIDTH + round(j-.5)]->code;
 	int iFloor = i;
 	int jFloor = j;
 	float leftOverI = i-iFloor;
-	float leftOverJ = j-jFloor; 
+	float leftOverJ = j-jFloor;
+	std::cout << code << "    " << j << " " << leftOverJ << "    " << i << " " << leftOverI << "\n";
+
+	float buffer = .05; // Multiply this by root 2 for diagonal walls
 
 	switch (code)
 	{
 	case 0:
 		return true;
+	case 1:
+		return leftOverJ+leftOverI > .5+buffer;
+	case 2:
+		return (1-leftOverJ)+leftOverI > .5+buffer;
 	case 3:
-		return leftOverI > .5;
+		return leftOverI > .5+buffer;
+	case 4:
+		return leftOverJ+(1-leftOverI) > .5+buffer;
 	case 5:
-		return leftOverJ > .5;
+		return leftOverJ > .5+buffer;
+	case 6:
+		return (1-leftOverJ)+leftOverI > .5 && leftOverJ+(1-leftOverI) > .5+buffer;
+	case 7:
+		return (1-leftOverJ)+(1-leftOverI) < .5-buffer;
+	case 8:
+		return (1-leftOverJ)+(1-leftOverI) > .5+buffer;
+	case 9:
+		return leftOverJ+leftOverI > .5+buffer && (1-leftOverJ)+(1-leftOverI) > .5+buffer;
 	case 10:
-		return leftOverJ < .5;
+		return leftOverJ < .5-buffer;
+	case 11:
+		return leftOverJ+(1-leftOverI) < .5-buffer;
 	case 12:
-		return leftOverI < .5;
+		return leftOverI < .5-buffer;
+	case 13:
+		(1-leftOverJ)+leftOverI < .5-buffer;
+	case 14:
+		return leftOverJ+leftOverI < .5-buffer;
 	case 15:
 		return false;
 	default:
