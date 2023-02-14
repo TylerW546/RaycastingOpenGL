@@ -126,53 +126,58 @@ int Environment::GetCode(int i, int j) {
 	return squares[i * SQUARES_WIDTH + j]->code;
 }
 
+std::vector<float> Environment::IndexAtPos(float x, float y, int mapSize) {
+	std::vector<float> x((-y/mapSize+1)/2*SQUARES_HEIGHT, (x/mapSize+1)/2*SQUARES_WIDTH);
+	return x;
+}
+
 bool Environment::PositionInAir(float i, float j) {
-	//i -= .5;
-	//j -= .5;
-	int code = squares[round(i-.5) * SQUARES_WIDTH + round(j-.5)]->code;
 	int iFloor = i;
 	int jFloor = j;
 	float leftOverI = i-iFloor;
 	float leftOverJ = j-jFloor;
-	std::cout << code << "    " << j << " " << leftOverJ << "    " << i << " " << leftOverI << "\n";
-
-	float buffer = .05; // Multiply this by root 2 for diagonal walls
+	int code = squares[round(iFloor) * SQUARES_WIDTH + round(jFloor)]->code;
+	//std::cout << code << "    " << j << " " << leftOverJ << "    " << i << " " << leftOverI << "\n";
 
 	switch (code)
 	{
 	case 0:
 		return true;
 	case 1:
-		return leftOverJ+leftOverI > .5+buffer;
+		return leftOverJ+leftOverI > .5+diagBuffer;
 	case 2:
-		return (1-leftOverJ)+leftOverI > .5+buffer;
+		return (1-leftOverJ)+leftOverI > .5+diagBuffer;
 	case 3:
 		return leftOverI > .5+buffer;
 	case 4:
-		return leftOverJ+(1-leftOverI) > .5+buffer;
+		return leftOverJ+(1-leftOverI) > .5+diagBuffer;
 	case 5:
 		return leftOverJ > .5+buffer;
 	case 6:
-		return (1-leftOverJ)+leftOverI > .5 && leftOverJ+(1-leftOverI) > .5+buffer;
+		return (1-leftOverJ)+leftOverI > .5+diagBuffer && leftOverJ+(1-leftOverI) > .5+diagBuffer;
 	case 7:
-		return (1-leftOverJ)+(1-leftOverI) < .5-buffer;
+		return (1-leftOverJ)+(1-leftOverI) < .5-diagBuffer;
 	case 8:
-		return (1-leftOverJ)+(1-leftOverI) > .5+buffer;
+		return (1-leftOverJ)+(1-leftOverI) > .5+diagBuffer;
 	case 9:
-		return leftOverJ+leftOverI > .5+buffer && (1-leftOverJ)+(1-leftOverI) > .5+buffer;
+		return leftOverJ+leftOverI > .5+diagBuffer && (1-leftOverJ)+(1-leftOverI) > .5+diagBuffer;
 	case 10:
 		return leftOverJ < .5-buffer;
 	case 11:
-		return leftOverJ+(1-leftOverI) < .5-buffer;
+		return leftOverJ+(1-leftOverI) < .5-diagBuffer;
 	case 12:
 		return leftOverI < .5-buffer;
 	case 13:
-		(1-leftOverJ)+leftOverI < .5-buffer;
+		(1-leftOverJ)+leftOverI < .5-diagBuffer;
 	case 14:
-		return leftOverJ+leftOverI < .5-buffer;
+		return leftOverJ+leftOverI < .5-diagBuffer;
 	case 15:
 		return false;
 	default:
 		return true;
 	}
+}
+
+std::vector<float> Environment::WallIntersection(float i, float j, float iTarget, float jTarget) {
+	return std::vector<float>{10,10};
 }

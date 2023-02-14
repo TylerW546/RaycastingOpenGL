@@ -11,6 +11,25 @@
 #include"TrisSquares.hpp"
 #include"NodeMap.hpp"
 
+const float wallLinearizations[16][8] = {
+	{}, // 0
+	{0,0.5,0.5,0}, // 1
+	{0.5,0,1,0.5}, // 2
+	{0,0.5,1,0.5}, // 3
+	{0.5,1,0,0.5}, // 4
+	{0.5,1,0.5,0}, // 5
+	{0.5,0,1,0.5,0.5,1,0,0.5}, // 6
+	{0.5,1,1,0.5}, // 7
+	{1,0.5,0.5,1}, // 8
+	{1,0.5,0.5,1,0,0.5,0.5,0}, // 9
+	{0.5,0,0.5,1}, // 10
+	{0,0.5,0.5,1}, // 11
+	{1,0.5,0,0.5}, // 12
+	{1,0.5,0.5,0}, // 13
+	{0.5,0,0,0.5}, // 14
+	{},
+};
+
 class Environment
 {
 public:
@@ -27,22 +46,14 @@ public:
 	void MarchAllSquares();
 
 	int GetCode(int i, int j);
+	std::vector<float> IndexAtPos(float x, float y, int mapSize);
 	bool PositionInAir(float x, float y);
-
-	void ToggleMesh();
-	void ToggleLines();
-	void ToggleExteriors();
-	void ToggleUniques();
-
-	void ToggleOns();
-	void ToggleOffs();
-
-	void RegenerateShaders();
-	void GenerateShaders();
-	void Draw();
-	void ShaderClean();
+	std::vector<float> WallIntersection(float i, float j, float iTarget, float jTarget);
 
 	void Destroy();
+
+	const float buffer = .1; // Multiply this by root 2 for diagonal walls
+	const float diagBuffer = buffer*sqrt(2);
 
 	std::vector<float> vertices;
 

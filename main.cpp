@@ -98,9 +98,13 @@ class TestGame : public gl::Entity {
             posCheck_.y += speed*sin(Util::rad(direction_+180));
         }
         //if (e->GetCode(-posCheck_.y/mapSize+1)/2*e->SQUARES_HEIGHT, (posCheck_.x/mapSize+1)/2*e->SQUARES_WIDTH) != 15) {
-        if (e->PositionInAir((-posCheck_.y/mapSize+1)/2*e->SQUARES_HEIGHT, (posCheck_.x/mapSize+1)/2*e->SQUARES_WIDTH)) {
+        std::vector<float> posIndexes = e->IndexAtPos(position_.x, position_.y, mapSize);
+        std::vector<float> posCheckIndexes = e->IndexAtPos(position_.x, position_.y, mapSize);
+        if (e->PositionInAir(posCheckIndexes[0], posCheckIndexes[1])) {
             position_.x = posCheck_.x;
             position_.y = posCheck_.y;
+        } else {
+            std::vector<float> finalIndexes = e->WallIntersection(posIndexes[0], posIndexes[1], posCheckIndexes[0], posCheckIndexes[1]);
         }
 
         if (game.Keys[GLFW_KEY_LEFT]) {
