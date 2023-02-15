@@ -34,8 +34,6 @@ class TestGame : public gl::Entity {
         e->GenerateVertices();
         e->GenerateNodes();
         e->MarchAllSquares();
-        
-        
 
         std::vector<Point<float>*> points;
         std::vector<Wall*> wallList;
@@ -99,7 +97,7 @@ class TestGame : public gl::Entity {
         }
         //if (e->GetCode(-posCheck_.y/mapSize+1)/2*e->SQUARES_HEIGHT, (posCheck_.x/mapSize+1)/2*e->SQUARES_WIDTH) != 15) {
         std::vector<float> posIndexes = e->IndexAtPos(position_.x, position_.y, mapSize);
-        std::vector<float> posCheckIndexes = e->IndexAtPos(position_.x, position_.y, mapSize);
+        std::vector<float> posCheckIndexes = e->IndexAtPos(posCheck_.x, posCheck_.y, mapSize);
         if (e->PositionInAir(posCheckIndexes[0], posCheckIndexes[1])) {
             position_.x = posCheck_.x;
             position_.y = posCheck_.y;
