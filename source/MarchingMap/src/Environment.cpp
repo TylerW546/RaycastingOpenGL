@@ -127,8 +127,7 @@ int Environment::GetCode(int i, int j) {
 }
 
 std::vector<float> Environment::IndexAtPos(float x, float y, int mapSize) {
-	std::vector<float> x((-y/mapSize+1)/2*SQUARES_HEIGHT, (x/mapSize+1)/2*SQUARES_WIDTH);
-	return x;
+	return std::vector<float>{(-y/mapSize+1)/2*SQUARES_HEIGHT, (x/mapSize+1)/2*SQUARES_WIDTH};
 }
 
 bool Environment::PositionInAir(float i, float j) {

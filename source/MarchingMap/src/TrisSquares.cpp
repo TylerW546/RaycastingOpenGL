@@ -70,7 +70,6 @@ void Square::MarchSquare(std::vector<std::vector<int>> nodes, int VERTS_WIDTH)
 	if (nodes[i + 1][j + 1] == 0)
 		code += 8;
 
-	int startVert = c1;
 	if (code != 0)
 	{
 		numTris = squareCombsArray[code][0][0];
