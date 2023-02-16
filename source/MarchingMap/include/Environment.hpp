@@ -35,7 +35,6 @@ class Environment
 public:
 	Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_);
 	~Environment();
-	void GenerateVertices();
 
 	void GenerateNodes();
 	void SetDrawingNodes();

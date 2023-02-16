@@ -31,7 +31,6 @@ class TestGame : public gl::Entity {
     public:
 
     TestGame(gl::Game &game) {
-        e->GenerateVertices();
         e->GenerateNodes();
         e->MarchAllSquares();
 
@@ -39,8 +38,10 @@ class TestGame : public gl::Entity {
         std::vector<Wall*> wallList;
 
         for (int i = 0; i < e->uniqueExteriorLines.size(); i+=2) {
-            Point<float>* p1 = new Point<float> {mapSize*e->vertices.at(e->uniqueExteriorLines.at(i)*2), mapSize*(e->vertices.at(e->uniqueExteriorLines.at(i)*2+1))};
-            Point<float>* p2 = new Point<float> {mapSize*e->vertices.at(e->uniqueExteriorLines.at(i+1)*2), mapSize*(e->vertices.at(e->uniqueExteriorLines.at(i+1)*2+1))};
+            Point<float>* p1 = new Point<float> {mapSize*( ( (float) ( e->uniqueExteriorLines.at(i) % (e->VERTS_WIDTH)) / (e->VERTS_WIDTH-1)) * 2 - 1) , 
+                                                 -mapSize*( ( (float) ( e->uniqueExteriorLines.at(i)) / (e->VERTS_HEIGHT) / (e->VERTS_HEIGHT-1)) * 2 - 1)};
+            Point<float>* p2 = new Point<float>  {mapSize*( ( (float) ( e->uniqueExteriorLines.at(i+1) % (e->VERTS_WIDTH)) / (e->VERTS_WIDTH-1)) * 2 - 1) , 
+                                                 -mapSize*( ( (float) ( e->uniqueExteriorLines.at(i+1)) / (e->VERTS_HEIGHT) / (e->VERTS_HEIGHT-1)) * 2 - 1)};
             int code = e->wallCodes.at(i);
             //std::cout<<p1->x<<" "<<p1->y<<"   "<<p2->x<<" "<<p2->y<<"\n";
             wallList.push_back(new Wall(p1,p2,resourceManager.texture(std::to_string(code))));

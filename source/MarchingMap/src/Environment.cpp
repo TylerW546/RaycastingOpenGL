@@ -51,18 +51,6 @@ Environment::~Environment() {
 	delete[] outLineCombs;
 }
 
-void Environment::GenerateVertices()
-{
-	for (int i = 0; i < VERTS_HEIGHT; i++)
-	{
-		for (int j = 0; j < VERTS_WIDTH; j++)
-		{
-			vertices.push_back((float)(j) / (VERTS_WIDTH - 1) * 2 - 1);
-			vertices.push_back(-((float)(i) / (VERTS_HEIGHT - 1) * 2 - 1));
-		}
-	}
-}
-
 void Environment::GenerateNodes() {
 	nM.GenerateNodeMap();
 	nM.PrintMap(0,0);
@@ -91,23 +79,7 @@ void Environment::MarchAllSquares()
 					mainMesh.push_back(s->tris[h]->v1);
 					mainMesh.push_back(s->tris[h]->v2);
 					mainMesh.push_back(s->tris[h]->v3);
-
-					// allLines.push_back(s->tris[h]->v1);
-					// allLines.push_back(s->tris[h]->v2);
-					// allLines.push_back(s->tris[h]->v2);
-					// allLines.push_back(s->tris[h]->v3);
-					// allLines.push_back(s->tris[h]->v3);
-					// allLines.push_back(s->tris[h]->v1);
 				}
-
-				// std::vector<int> outlineVerts = *(s->GetOutlineLines());
-				// for (int g = 0; g < s->numTris + 1; g++)
-				// {
-				// 	exteriorLines.push_back(outlineVerts.at(g));
-				// 	exteriorLines.push_back(outlineVerts.at(g+1));
-				// }
-				// exteriorLines.push_back(outlineVerts.at(s->numTris + 1));
-				// exteriorLines.push_back(outlineVerts.at(0));
 				
 				if (s->numOutVerts > 0) {
 					for (int f = 0; f < s->numOutVerts; f++)
@@ -116,7 +88,6 @@ void Environment::MarchAllSquares()
 						wallCodes.push_back(s->code);
 					}
 				}
-				// std::cout << "ExtPush\n";
 			}
 		}
 	}
