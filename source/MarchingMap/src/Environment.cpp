@@ -1,4 +1,3 @@
-#include"TrisSquares.hpp"
 #include"Environment.hpp"
 
 Environment::Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_)
@@ -9,14 +8,11 @@ Environment::Environment(int SQUARES_WIDTH_, int SQUARES_HEIGHT_)
 	NODES_WIDTH = SQUARES_WIDTH + 1;
 	NODES_HEIGHT = SQUARES_HEIGHT + 1;
 
-	VERTS_WIDTH = 2 * NODES_WIDTH - 1;
-	VERTS_HEIGHT = 2 * NODES_HEIGHT - 1;
-
 	for (int i = 0; i < SQUARES_HEIGHT; i++)
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			Square* sq = new Square(2*(i * VERTS_WIDTH + j), 2*(i * SQUARES_WIDTH + j) + 2*VERTS_WIDTH + 2);
+			Square* sq = new Square(j, i);
 			squares.push_back(sq);
 		}
 	}
@@ -61,9 +57,6 @@ void Environment::GenerateNodes() {
 
 void Environment::MarchAllSquares()
 {
-	mainMesh.clear();
-	//allLines = std::vector<int> (0);
-	//exteriorLines = std::vector<int> (0);
 	uniqueExteriorLines.clear();
 
 	for (int i = 0; i < SQUARES_HEIGHT; i++)
@@ -71,16 +64,9 @@ void Environment::MarchAllSquares()
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
 			Square* s = squares[i * SQUARES_WIDTH + j];
-			s->MarchSquare(nM.nodes, VERTS_WIDTH);
+			s->MarchSquare(nM.nodes);
 			if (s->code != 0)
 			{
-				for (int h = 0; h < s->numTris; h++)
-				{
-					mainMesh.push_back(s->tris[h]->v1);
-					mainMesh.push_back(s->tris[h]->v2);
-					mainMesh.push_back(s->tris[h]->v3);
-				}
-				
 				if (s->numOutVerts > 0) {
 					for (int f = 0; f < s->numOutVerts; f++)
 					{
@@ -138,7 +124,7 @@ bool Environment::PositionInAir(float i, float j) {
 	case 12:
 		return leftOverI < .5-buffer;
 	case 13:
-		(1-leftOverJ)+leftOverI < .5-diagBuffer;
+		return (1-leftOverJ)+leftOverI < .5-diagBuffer;
 	case 14:
 		return leftOverJ+leftOverI < .5-diagBuffer;
 	case 15:

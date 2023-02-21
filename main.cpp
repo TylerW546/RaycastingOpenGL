@@ -38,22 +38,17 @@ class TestGame : public gl::Entity {
         std::vector<Wall*> wallList;
 
         for (int i = 0; i < e->uniqueExteriorLines.size(); i+=2) {
-            Point<float>* p1 = new Point<float> {mapSize*( ( (float) ( e->uniqueExteriorLines.at(i) % (e->VERTS_WIDTH)) / (e->VERTS_WIDTH-1)) * 2 - 1) , 
-                                                 -mapSize*( ( (float) ( e->uniqueExteriorLines.at(i)) / (e->VERTS_HEIGHT) / (e->VERTS_HEIGHT-1)) * 2 - 1)};
-            Point<float>* p2 = new Point<float>  {mapSize*( ( (float) ( e->uniqueExteriorLines.at(i+1) % (e->VERTS_WIDTH)) / (e->VERTS_WIDTH-1)) * 2 - 1) , 
-                                                 -mapSize*( ( (float) ( e->uniqueExteriorLines.at(i+1)) / (e->VERTS_HEIGHT) / (e->VERTS_HEIGHT-1)) * 2 - 1)};
+            Point<float>* p1 = new Point<float> {mapSize*(e->uniqueExteriorLines.at(i).x/e->SQUARES_WIDTH*2-1), 
+                                                 -mapSize*(e->uniqueExteriorLines.at(i).y/e->SQUARES_HEIGHT*2-1)};
+            Point<float>* p2 = new Point<float>  {mapSize*(e->uniqueExteriorLines.at(i+1).x/e->SQUARES_WIDTH*2-1), 
+                                                 -mapSize*(e->uniqueExteriorLines.at(i+1).y/e->SQUARES_HEIGHT*2-1)};
             int code = e->wallCodes.at(i);
-            //std::cout<<p1->x<<" "<<p1->y<<"   "<<p2->x<<" "<<p2->y<<"\n";
             wallList.push_back(new Wall(p1,p2,resourceManager.texture(std::to_string(code))));
         }
 
         map_ = Map(wallList);
 
-        std::cout<<"map created\n";
-        //std::cout << "Initializing raycaster\n";
         raycaster_ = new RayCaster(game);
-
-        std::cout<<"raycaster\n";
 
         bool found = false;
         for (float i = 0; i < e->SQUARES_HEIGHT && !found; i++)
@@ -77,8 +72,6 @@ class TestGame : public gl::Entity {
     }
 
     void update(const gl::GameData &game) override {
-        //direction_ = std::fmod((direction_ + 1),360);
-
         posCheck_ = {position_.x, position_.y};
         if (game.Keys[GLFW_KEY_A]) {
             posCheck_.x += speed*cos(Util::rad(direction_+90));
@@ -96,7 +89,7 @@ class TestGame : public gl::Entity {
             posCheck_.x += speed*cos(Util::rad(direction_+180));
             posCheck_.y += speed*sin(Util::rad(direction_+180));
         }
-        //if (e->GetCode(-posCheck_.y/mapSize+1)/2*e->SQUARES_HEIGHT, (posCheck_.x/mapSize+1)/2*e->SQUARES_WIDTH) != 15) {
+        
         std::vector<float> posIndexes = e->IndexAtPos(position_.x, position_.y, mapSize);
         std::vector<float> posCheckIndexes = e->IndexAtPos(posCheck_.x, posCheck_.y, mapSize);
         if (e->PositionInAir(posCheckIndexes[0], posCheckIndexes[1])) {
@@ -134,7 +127,6 @@ int main() {
     game.loadEntity(testG);
     game.execute();
 
-    //delete testG;
     
     return 0;
 }

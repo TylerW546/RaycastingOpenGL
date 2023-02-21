@@ -8,7 +8,7 @@
 #include<stdlib.h>
 #include<vector>
 
-#include"TrisSquares.hpp"
+#include"Square.hpp"
 #include"NodeMap.hpp"
 
 const float wallLinearizations[16][8] = {
@@ -61,10 +61,7 @@ public:
 	int*** squareCombs;
 	int*** outLineCombs;
 
-	std::vector<int> mainMesh;
-	//std::vector<int> allLines;
-	std::vector<int> exteriorLines;
-	std::vector<int> uniqueExteriorLines;
+	std::vector<Point<float>> uniqueExteriorLines;
 	std::vector<int> wallCodes;
 
 	int SQUARES_WIDTH;
@@ -72,9 +69,6 @@ public:
 
 	int NODES_WIDTH;
 	int NODES_HEIGHT;
-
-	int VERTS_WIDTH;
-	int VERTS_HEIGHT;
 
 	std::vector<Square*> squares;
 };
